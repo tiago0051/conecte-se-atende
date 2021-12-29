@@ -1,10 +1,13 @@
 import MySql from 'mysql';
 
+let connection;
+
 export default async function DB(){
-    const connection = MySql.createConnection({
-        host: process.env.PLANETSCALE_DB_HOST,
-        user: process.env.PLANETSCALE_DB_USERNAME,
-        password: process.env.PLANETSCALE_DB_PASSWORD,
-        database: process.env.PLANETSCALE_DB_DATABASE
-    })
+    if(!(connection && connection.state === 'connected')){
+        connection = await MySql.createConnection("mysql://"+ process.env.PLANETSCALE_DB_USERNAME +":"+ process.env.PLANETSCALE_DB_PASSWORD +"@"+ process.env.PLANETSCALE_DB_HOST +"/"+ process.env.PLANETSCALE_DB_DATABASE +"?ssl=true");
+    
+        await connection.connect();
+    }
+
+    return connection;
 }
