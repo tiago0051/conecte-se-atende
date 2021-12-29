@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {MainStyled} from '../../../styles/cliente/login';
+import {MainStyled} from '../../../styles/empresa/login';
 import {FiLogIn} from 'react-icons/fi'
 import {FaFacebookSquare, FaGoogle} from 'react-icons/fa'
 
@@ -22,9 +22,7 @@ export default function Login(){
                     <input type="password" />
                 </label>
                 <button>Entrar <FiLogIn/></button>
-                <button>Entrar com Facebook <FaFacebookSquare/></button>
-                <button>Entrar com Google <FaGoogle/></button>
-                <p>Ainda não tem conta? <Link href="/cliente/cadastrar">Cadastre-se</Link></p>
+                <p><Link href="/empresa/recuperar-senha">Esqueceu sua senha?</Link></p>
             </form>
         </MainStyled>
     )

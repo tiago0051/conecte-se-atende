@@ -7,7 +7,7 @@ export const MainStyled = styled.main`
     justify-content: center;
     width: 100%;
     height: 100vh;
-    background-color: ${props =>props.theme.colors.primary};
+    background-color: ${props =>props.theme.colors.secondary};
 
     form {
         display: flex;
@@ -18,8 +18,8 @@ export const MainStyled = styled.main`
         border-radius: 0.5rem;
 
         h1 {
-            border-bottom: 3px solid ${props =>props.theme.colors.primary};
-            color: ${props =>props.theme.colors.primary};
+            border-bottom: 3px solid ${props =>props.theme.colors.secondary};
+            color: ${props =>props.theme.colors.secondary};
             width: 100%;
             text-align: center;
             margin-bottom: 2rem;
@@ -33,7 +33,7 @@ export const MainStyled = styled.main`
             flex-direction: column;
             margin-bottom: 1.5rem;
             width: 100%;
-            color: ${props =>props.theme.colors.primary};
+            color: ${props =>props.theme.colors.secondary};
             font-size: 1.3rem;
             text-transform: uppercase;
 
@@ -42,12 +42,12 @@ export const MainStyled = styled.main`
                 font-size: 2rem;
                 padding: 5px 10px;
                 border-radius: 0.5rem;
-                border: 1px solid ${props =>props.theme.colors.primary};
+                border: 1px solid ${props =>props.theme.colors.secondary};
                 background-color: white;
                 transition: border 0.2s linear;
 
                 :focus{
-                    border: 1px solid ${props =>props.theme.colors.secondary};
+                    border: 1px solid ${props =>props.theme.colors.primary};
                 }
             }
         }
@@ -56,7 +56,7 @@ export const MainStyled = styled.main`
             width: 100%;
             padding: 5px 10px;
             border-radius: 0.5rem;
-            background-color: ${props =>props.theme.colors.primary};
+            background-color: ${props =>props.theme.colors.secondary};
             border: 0;
             font-size: 1.9rem;
             color: white;
