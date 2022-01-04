@@ -18,13 +18,14 @@ export default function Dashboard(){
     const router = useRouter()
 
     const [clientes, setClientes] = useState<ICliente[]>([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const {token} = parseCookies()
 
         axios.get("/api/clientes/listar", {headers: {Authorization: `${token}`}}).then(response => {
-            console.log(response.data)
             setClientes(response.data)
+            setLoading(false)
         })
     }, [])
 
@@ -45,6 +46,9 @@ export default function Dashboard(){
 
                     <ul>
                         {
+                            loading ?
+                            <>Loading</>
+                                :
                             clientes.map(cliente => (
                                 <LineStyled key={cliente.cpf as Key}>
                                     <div>

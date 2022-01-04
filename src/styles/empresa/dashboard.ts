@@ -218,7 +218,7 @@ export const SectionStyled = styled.section`
     }
 `
 
-export const LineStyled = styled.li<ILineStyled>`
+export const LineStyled = styled.li`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -306,5 +306,11 @@ export const ConfiguraçõesStyled = styled.main`
 
     input[type="submit"]{
         display: none;
+    }
+
+    @media (max-width: 768px) {
+        input {
+            width: 100%;
+        }
     }
 `
