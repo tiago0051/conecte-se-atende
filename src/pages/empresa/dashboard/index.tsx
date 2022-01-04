@@ -1,8 +1,8 @@
 import { NextPageContext } from "next"
 import { parseCookies } from "nookies"
-import { FiUserPlus } from "react-icons/fi"
+import { FiUserPlus, FiSearch, FiEdit } from "react-icons/fi"
 
-import { Container, SectionStyled } from "../../../styles/empresa/dashboard"
+import { Container, SectionStyled, LineStyled } from "../../../styles/empresa/dashboard"
 
 import Navbar from "../../../components/navbar"
 
@@ -18,7 +18,22 @@ export default function Dashboard(){
                 </header>
 
                 <main>
-                    <input type="text" placeholder="Pesquisar"/>
+                    <label>
+                        <input type="text" placeholder="Pesquisar Cliente"/><FiSearch/>
+                    </label>
+
+                    <ul>
+                        <LineStyled>
+                            <div>
+                                <h3><b>NOME:</b> ANNA CLARA</h3>
+                                <p><b>CPF:</b> 1233123123</p>
+                            </div>
+
+                            <div>
+                                <FiEdit/>
+                            </div>
+                        </LineStyled>
+                    </ul>
                 </main>
             </SectionStyled>
         </Container>

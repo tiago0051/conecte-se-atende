@@ -22,7 +22,7 @@ export default function Navbar(Props: INavBarProps) {
             </ul>
             
             <ul>
-                <NavBarLink><Link href="/empresa/dashboard/configuracoes">Configurações</Link></NavBarLink>
+                <NavBarLink selected={Props.page == "configurações"}><Link href="/empresa/dashboard/configuracoes">Configurações</Link></NavBarLink>
                 <li><Link href="/empresa/login">Sair</Link></li>
             </ul>
         </NavStyled>

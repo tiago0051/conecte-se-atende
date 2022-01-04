@@ -14,6 +14,7 @@ export const Container = styled.main`
         width: calc(100% - 250px);
         background-color: ${props => props.theme.colors.background};
         padding: 1rem 2rem;
+        overflow-y: scroll;
     }
 `
 
@@ -108,17 +109,134 @@ export const SectionStyled = styled.section`
             display: flex;
             flex-direction: row;
             align-items: center;
+            transition: filter 0.1s linear;
+            cursor: pointer;
 
             svg {
                 margin-right: 1rem;
             }
+
+            :hover {
+                filter: brightness(1.2);
+            }
+        }
+    }
+
+    label {
+        position: relative;
+
+        > svg {
+            position: absolute;
+            font-size: 2rem;
+            top: -10px;
+            right: 15px;
+            color: ${props => props.theme.colors.secondary};
         }
     }
 
     input {
         font-size: 1.3rem;
         border-radius: 25px;
-        padding: 10px;
+        padding: 10px 55px 10px 20px;
         border: 1px solid ${props => props.theme.colors.border};
+        transition: border 0.1s linear;
+
+        ::placeholder {
+            text-align: center;
+        }
+
+        :focus {
+            border: 1px solid ${props => props.theme.colors.secondary};
+        }
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 1rem;
+        list-style: none;
+    }
+`
+
+export const LineStyled = styled.li`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid ${props => props.theme.colors.border};
+    background-color: ${props => props.theme.colors.background2};
+    padding: 1rem;
+    transition: all 0.1s linear;
+    cursor: pointer;
+    margin: 1rem 0;
+
+    :hover {
+        border: 1px solid ${props => props.theme.colors.secondary};
+        box-shadow: 0 0 10px 4px rgb(0, 0, 0, 0.2);
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        cursor: pointer;
+        color: ${props => props.theme.colors.border};
+
+        h3 {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        span {
+            margin-top: 10px;
+            font-size: 1.3rem;
+            font-weight: 900;
+        }
+
+        b {
+            font-weight: 700px;
+            color: ${props => props.theme.colors.text};
+        }
+    }
+
+    div > svg {
+        font-size: 2rem;
+        transition: color 0.1s linear;
+
+        :hover {
+            color: ${props => props.theme.colors.secondary};
+        }
+    }
+`
+
+export const ConfiguraçõesStyled = styled.main`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+
+    input {
+        border-radius: 5px;
+        width: 800px;
+    }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        font-weight: 700;
+        color: ${props => props.theme.colors.secondary};
+        margin-bottom: 1rem;
+    }
+
+    button {
+        background-color: ${props => props.theme.colors.secondary};
+        color: ${props => props.theme.colors.background2};
+        border: 0;
+        border-radius: 10px;
+        font-size: 1.5rem;
+        width: 200px;
+        padding: 10px;
     }
 `
