@@ -1,3 +1,4 @@
+import { AppProps } from 'next/dist/shared/lib/router/router'
 import { ThemeProvider } from 'styled-components'
 
 import { lightTheme } from '../styles/theme'
@@ -5,7 +6,7 @@ import { lightTheme } from '../styles/theme'
 import GlobalStyled from '../styles/global'
 import { AuthProvider } from '../contexts/AuthContext'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <ThemeProvider theme={lightTheme}>

@@ -1,6 +1,6 @@
 import MySql from 'mysql';
 
-let connection;
+let connection: MySql.Connection;
 
 export default async function DB(){
     if(!(connection && connection.state === 'connected')){

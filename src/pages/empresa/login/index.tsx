@@ -3,9 +3,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useContext } from 'react';
 import { useRouter } from 'next/router'
+import { NextPageContext } from 'next';
+import { destroyCookie } from 'nookies';
+import {FiLogIn} from 'react-icons/fi'
 
 import {MainStyled} from '../../../styles/empresa/login';
-import {FiLogIn} from 'react-icons/fi'
 import { AuthContext } from '../../../contexts/AuthContext';
 
 export default function Login(){
@@ -16,7 +18,7 @@ export default function Login(){
     const [senha, setSenha] = useState('');
     const [error, setError] = useState('');
 
-    function handleSubmitLogar(event){
+    function handleSubmitLogar(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
 
         signIn(email, senha).then(response => {
@@ -48,4 +50,12 @@ export default function Login(){
             </form>
         </MainStyled>
     )
+}
+
+export function getServerSideProps(ctx: NextPageContext){
+    destroyCookie(ctx, "token", {path: '/'})
+
+    return {
+        props: {}
+    }
 }

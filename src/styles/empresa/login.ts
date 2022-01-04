@@ -13,7 +13,7 @@ export const MainStyled = styled.main`
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: white;
+        background-color: ${props =>props.theme.colors.background};
         padding: 1.8rem 2rem;
         border-radius: 0.5rem;
 
@@ -43,7 +43,7 @@ export const MainStyled = styled.main`
                 padding: 5px 10px;
                 border-radius: 0.5rem;
                 border: 1px solid ${props =>props.theme.colors.secondary};
-                background-color: white;
+                background-color: ${props =>props.theme.colors.background};
                 transition: border 0.2s linear;
 
                 :focus{
