@@ -50,6 +50,24 @@ export async function loginUsuário(usuárioL: String, senha: string){
     })
 }
 
+export async function InsertUsuário(user: String, nome: String, email: String, id_empresa: number, id_permissao: number){
+    const DB = await db();
+
+    var sql = `INSERT INTO usuarios (user, nome, email, id_empresa, id_permissao, id_tipo_acesso) VALUES ('${user}', '${nome}', '${email}', ${id_empresa}, ${id_permissao}, 1)`;
+
+    return new Promise<IUsuário | null>((resolve, reject) => {
+        DB.query(sql, (err, result) => {
+            if(err)resolve(null)
+
+            if(result.insertId){
+                resolve(usuário(result.insertId, result.user, result.nome, result.email, result.id_empresa, result.id_permissao))
+            }else{
+                resolve(null)
+            }
+        })
+    })
+}
+
 export function encrypt(senha: string){
     var hash = bcrypt.hashSync(senha, 10)
 

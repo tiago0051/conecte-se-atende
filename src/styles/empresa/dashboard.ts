@@ -16,6 +16,19 @@ export const Container = styled.main`
         padding: 1rem 2rem;
         overflow-y: scroll;
     }
+    
+    @media (max-width: 768px) {
+        nav:nth-child(1) {
+            width: 100vw;
+            height: 80px;
+            position: fixed;
+            bottom: 0;
+        }
+
+        section:nth-child(2) {
+            width: 100%;
+        }
+    }
 `
 
 export const NavStyled = styled.nav`
@@ -65,6 +78,33 @@ export const NavStyled = styled.nav`
 
         :hover {
             border-bottom: 2px solid ${props => props.theme.colors.background};
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 0;
+        margin: 0;
+
+        div:nth-child(1) {
+            display: none !important;
+        }
+
+        ul {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            margin: 0;
+            padding: 0 1rem;
+
+            li {
+                display: flex;
+                flex-direction: column;
+
+                a {
+                    font-size: 1.5rem;
+                }
+            }
         }
     }
 `
@@ -157,9 +197,28 @@ export const SectionStyled = styled.section`
         margin-top: 1rem;
         list-style: none;
     }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2rem !important; 
+        }
+
+        button {
+            font-size: 0 !important;
+            width: 65px;
+            height: 65px;
+            position: relative;
+            border-radius: 50% !important;
+            
+            > svg {
+                font-size: 1.5rem;
+                position: absolute;
+            }
+        }
+    }
 `
 
-export const LineStyled = styled.li`
+export const LineStyled = styled.li<ILineStyled>`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -228,6 +287,11 @@ export const ConfiguraçõesStyled = styled.main`
         font-weight: 700;
         color: ${props => props.theme.colors.secondary};
         margin-bottom: 1rem;
+
+        > p > b {
+            color: red;
+            margin-left: 10px;
+        }
     }
 
     button {
@@ -238,5 +302,9 @@ export const ConfiguraçõesStyled = styled.main`
         font-size: 1.5rem;
         width: 200px;
         padding: 10px;
+    }
+
+    input[type="submit"]{
+        display: none;
     }
 `

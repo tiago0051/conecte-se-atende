@@ -1,12 +1,33 @@
 import { NextPageContext } from "next"
 import { parseCookies } from "nookies"
 import { FiUserPlus, FiSearch, FiEdit } from "react-icons/fi"
+import {useRouter} from "next/router"
+import axios from "axios"
+import { Key, useEffect, useState } from "react"
 
 import { Container, SectionStyled, LineStyled } from "../../../styles/empresa/dashboard"
-
 import Navbar from "../../../components/navbar"
 
+interface ICliente {
+    nome: String,
+    email: String,
+    cpf: String
+}
+
 export default function Dashboard(){
+    const router = useRouter()
+
+    const [clientes, setClientes] = useState<ICliente[]>([])
+
+    useEffect(() => {
+        const {token} = parseCookies()
+
+        axios.get("/api/clientes/listar", {headers: {Authorization: `${token}`}}).then(response => {
+            console.log(response.data)
+            setClientes(response.data)
+        })
+    }, [])
+
     return (
         <Container>
             <Navbar page="clientes"/>
@@ -14,7 +35,7 @@ export default function Dashboard(){
             <SectionStyled>
                 <header>
                     <h1>Clientes</h1>
-                    <button><FiUserPlus/>Adicionar Cliente</button>
+                    <button onClick={() => router.push("/empresa/dashboard/cliente/0")}><FiUserPlus/>Adicionar Cliente</button>
                 </header>
 
                 <main>
@@ -23,16 +44,20 @@ export default function Dashboard(){
                     </label>
 
                     <ul>
-                        <LineStyled>
-                            <div>
-                                <h3><b>NOME:</b> ANNA CLARA</h3>
-                                <p><b>CPF:</b> 1233123123</p>
-                            </div>
+                        {
+                            clientes.map(cliente => (
+                                <LineStyled key={cliente.cpf as Key}>
+                                    <div>
+                                        <h3><b>NOME:</b> {cliente.nome}</h3>
+                                        <p><b>CPF:</b> {cliente.cpf}</p>
+                                    </div>
 
-                            <div>
-                                <FiEdit/>
-                            </div>
-                        </LineStyled>
+                                    <div>
+                                        <FiEdit/>
+                                    </div>
+                                </LineStyled>
+                            ))
+                        }
                     </ul>
                 </main>
             </SectionStyled>
