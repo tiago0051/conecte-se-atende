@@ -1,7 +1,8 @@
 import { NextPageContext } from "next"
 import { parseCookies } from "nookies"
+import { FiUserPlus } from "react-icons/fi"
 
-import { Container } from "../../../styles/empresa/dashboard"
+import { Container, SectionStyled } from "../../../styles/empresa/dashboard"
 
 import Navbar from "../../../components/navbar"
 
@@ -10,9 +11,16 @@ export default function Dashboard(){
         <Container>
             <Navbar page="clientes"/>
 
-            <section>
-                Dashboard
-            </section>
+            <SectionStyled>
+                <header>
+                    <h1>Clientes</h1>
+                    <button><FiUserPlus/>Adicionar Cliente</button>
+                </header>
+
+                <main>
+                    <input type="text" placeholder="Pesquisar"/>
+                </main>
+            </SectionStyled>
         </Container>
     )
 }
