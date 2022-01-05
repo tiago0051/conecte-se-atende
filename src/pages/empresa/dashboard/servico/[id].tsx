@@ -6,6 +6,7 @@ import { FiSave } from "react-icons/fi";
 import { useRouter } from "next/router";
 import Navbar from "../../../../components/navbar";
 import { ConfiguraçõesStyled, Container, SectionStyled } from "../../../../styles/empresa/dashboard";
+import { motion } from "framer-motion";
 
 interface IServiço {
     id: number,
@@ -71,7 +72,7 @@ export default function Editar({idServiço} : {idServiço: number}) {
                 </header>
 
                 <ConfiguraçõesStyled>
-                    <form id="form" onSubmit={handleSubmit}>
+                    <motion.form id="form" onSubmit={handleSubmit} initial={{x: -100, opacity: 0}} animate={{x: 0, opacity: 1}} transition={{ease: "easeInOut", duration: 2}}>
                         <label><p>Nome<b>*</b></p>
                             <input type="text" required value={nome} onChange={event => setNome(event.target.value)}/>
                         </label>
@@ -85,7 +86,7 @@ export default function Editar({idServiço} : {idServiço: number}) {
                         </label>
 
                         <input type="submit" id="salvar"/>
-                    </form>
+                    </motion.form>
                 </ConfiguraçõesStyled>
             </SectionStyled>
         </Container>

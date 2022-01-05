@@ -314,3 +314,33 @@ export const ConfiguraçõesStyled = styled.main`
         }
     }
 `
+
+export const ServiçosPrestadosStyled = styled.main`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0, 0, 0, 0.8);
+
+    > div {
+        width: 800px;
+        height: 700px;
+        background-color: ${props => props.theme.colors.background2};
+        border-radius: 10px;
+        position: relative;
+
+        > svg {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 2.5rem;
+            cursor: pointer;
+        }
+    }
+`

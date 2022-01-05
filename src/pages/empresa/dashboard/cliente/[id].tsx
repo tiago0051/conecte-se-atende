@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 
 import Navbar from "../../../../components/navbar";
 import { Container, SectionStyled, ConfiguraçõesStyled } from "../../../../styles/empresa/dashboard";
+import { motion } from "framer-motion";
 
 interface IProps {
     idCliente: number; 
@@ -95,7 +96,7 @@ export default function Editar({idCliente} : IProps){
                 </header>
 
                 <ConfiguraçõesStyled>
-                    <form id="form" onSubmit={handleSubmit}>
+                    <motion.form id="form" onSubmit={handleSubmit} initial={{x: -100, opacity: 0}} animate={{x: 0, opacity: 1}} transition={{ease: "easeInOut", duration: 2}}>
                         <label><p>Nome<b>*</b></p>
                             <input type="text" required defaultValue={nome} onChange={event => setNome(event.target.value)}/>
                         </label>
@@ -125,7 +126,7 @@ export default function Editar({idCliente} : IProps){
                         </label>
 
                         <input type="submit" id="salvar"/>
-                    </form>
+                    </motion.form>
                 </ConfiguraçõesStyled>
             </SectionStyled>
         </Container>
