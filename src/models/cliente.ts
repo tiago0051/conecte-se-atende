@@ -1,5 +1,5 @@
 import db from '../services/db'
-import { getUsuário, InsertUsuário } from './usuario';
+import { getUsuário, InsertUsuário, UpdateUsuário } from './usuario';
 
 interface ICliente {
     id: number,
@@ -47,13 +47,25 @@ export async function InsertCliente(nome: String, email: String, cpf: string, wh
     })
 }
 
-export async function UpdateCliente(cliente: ICliente){
+export async function UpdateCliente(id: number, nome: string, cpf: string, email: string, whatsapp: string, telefone: string, endereço: string, aniversario: string){
     const DB = await db();
 
     return new Promise<Boolean>((resolve, reject) => {
-        DB.query(`UPDATE clientes SET id_usuario = ${cliente.id_usuário}, cpf = '${cliente.cpf}', whatsapp = '${cliente.whatsapp}', tel = '${cliente.telefone}', id_empresa = ${cliente.id_empresa}, endereco = '${cliente.endereço}', aniversario = '${cliente.aniversario}' WHERE id = ${cliente.id}`, (err, result) => {
-            if(err) reject(err)
-           resolve(true)
+        DB.query(`UPDATE clientes SET cpf = '${cpf}', whatsapp = '${whatsapp}', tel = '${telefone}', endereco = '${endereço}', aniversario = '${aniversario}' WHERE id = ${id};`, (err, result) => {
+            if(err) reject(false)
+
+            DB.query(`SELECT * FROM clientes WHERE id = ${id};`, async (err, result) => {
+                if(err) reject(false)
+
+                const usuário = await UpdateUsuário(result[0].id_usuario, email, nome, email)
+
+                if(usuário){
+                    resolve(true)
+                }else{
+                    reject(false)
+                }
+            })
+            
         })
     })
 }
@@ -79,10 +91,10 @@ export async function getClienteUsuários(id_empresa: number){
     const DB = await db();
 
     return new Promise<{nome: String, email: String, cpf: String}[]>((resolve, reject) => {
-        DB.query(`SELECT usuarios.nome, usuarios.email, clientes.cpf FROM clientes INNER JOIN usuarios ON id_usuario = usuarios.id WHERE usuarios.id_empresa = ${id_empresa};`, (err, result) => {
+        DB.query(`SELECT usuarios.nome, usuarios.email, clientes.cpf, clientes.id FROM clientes INNER JOIN usuarios ON id_usuario = usuarios.id WHERE usuarios.id_empresa = ${id_empresa};`, (err, result) => {
             if(err) reject(err)
-           resolve(result.map((clienteL: { nome: String; email: String; cpf: String}) => {
-               return {nome: clienteL.nome, email: clienteL.email, cpf: clienteL.cpf}
+           resolve(result.map((clienteL: { nome: String; email: String; cpf: String, id: number}) => {
+               return {id: clienteL.id, nome: clienteL.nome, email: clienteL.email, cpf: clienteL.cpf}
            }))
         })
     })

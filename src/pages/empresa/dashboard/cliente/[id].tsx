@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NextPageContext } from "next";
 import { parseCookies } from "nookies";
-import React from "react";
+import React, { useEffect } from "react";
 import { FiSave } from "react-icons/fi";
 import { useRouter } from "next/router";
 
@@ -9,7 +9,7 @@ import Navbar from "../../../../components/navbar";
 import { Container, SectionStyled, ConfiguraçõesStyled } from "../../../../styles/empresa/dashboard";
 
 interface IProps {
-    cliente?: ICliente; 
+    idCliente: number; 
 }
 
 interface ICliente {
@@ -18,21 +18,46 @@ interface ICliente {
     email: string,
     whatsapp: string,
     telefone: string,
-    endereco: string,
+    endereço: string,
     aniversario: string,
 }
 
-export default function Editar({cliente} : IProps){
+export default function Editar({idCliente} : IProps){
     const router = useRouter();
 
-    const [nome, setNome] = React.useState(cliente?.nome);
-    const [email, setEmail] = React.useState(cliente?.email);
-    const [cpf, setCpf] = React.useState(cliente?.cpf);
-    const [whatsapp, setWhatsapp] = React.useState(cliente?.whatsapp);
-    const [telefone, setTelefone] = React.useState(cliente?.telefone);
-    const [endereco, setEndereco] = React.useState(cliente?.endereco);
-    const [aniversario, setAniversario] = React.useState(cliente?.aniversario);
+    const [nome, setNome] = React.useState<string>();
+    const [email, setEmail] = React.useState<string>();
+    const [cpf, setCpf] = React.useState<string>();
+    const [whatsapp, setWhatsapp] = React.useState<string>();
+    const [telefone, setTelefone] = React.useState<string>();
+    const [endereço, setEndereço] = React.useState<string>();
+    const [aniversario, setAniversario] = React.useState<string>();
 
+    const [loading, setLoading] = React.useState(true);
+
+    useEffect(() => {
+        const {token} = parseCookies();
+
+        if(idCliente === 0){
+            setLoading(false)
+        }else if(idCliente > 0){
+            axios.get(`/api/clientes/${idCliente}`, {headers: {authorization: token}}).then((response: {data: ICliente, status: number}) => {
+                if(response.status == 200){
+
+                    const aniversario = response.data.aniversario.substring(0, 10)
+
+                    setNome(response.data.nome);
+                    setEmail(response.data.email);
+                    setCpf(response.data.cpf);
+                    setWhatsapp(response.data.whatsapp);
+                    setTelefone(response.data.telefone);
+                    setEndereço(response.data.endereço);
+                    setAniversario(aniversario);
+                    setLoading(false)
+                }
+            })
+        }
+    }, [])
 
     function handleSubmit(event: React.SyntheticEvent){
         event.preventDefault()
@@ -40,12 +65,13 @@ export default function Editar({cliente} : IProps){
         const {token} = parseCookies()
 
         const cliente = {
+            id: idCliente,
             nome,
             cpf,
             email,
             whatsapp,
             telefone,
-            endereco,
+            endereço,
             aniversario,
         }
 
@@ -64,8 +90,8 @@ export default function Editar({cliente} : IProps){
 
             <SectionStyled>
                 <header>
-                    <h1>{cliente ? "Editar Cliente" : "Novo Cliente"}</h1>
-                    <button onClick={() => (document.getElementById("salvar") as HTMLInputElement).click()}><FiSave/>Salvar</button>
+                    <h1>{idCliente != 0 ? "Editar Cliente" : "Novo Cliente"}</h1>
+                    <button onClick={() => {(document.getElementById("salvar") as HTMLInputElement).click(); (document.getElementById("salvar") as HTMLInputElement).disabled = true}}><FiSave/>Salvar</button>
                 </header>
 
                 <ConfiguraçõesStyled>
@@ -91,7 +117,7 @@ export default function Editar({cliente} : IProps){
                         </label>
 
                         <label>Endereço
-                            <input type="text" defaultValue={endereco} onChange={event => setEndereco(event.target.value)}/>
+                            <input type="text" defaultValue={endereço} onChange={event => setEndereço(event.target.value)}/>
                         </label>
 
                         <label>Data de Aniversario
@@ -117,15 +143,13 @@ export function getServerSideProps(ctx: NextPageContext){
         }
     }
 
-    const idCliente = ctx.query.id;
-
-    if(idCliente == "0"){
-        return {
-            props: {}
-        }
-    }
+    var idCliente = parseInt(ctx.query.id as string);
+    
+    if(!idCliente)idCliente = 0
 
     return {
-        props: {}
+        props: {
+            idCliente
+        }
     }
 }

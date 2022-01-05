@@ -9,6 +9,7 @@ import { Container, SectionStyled, LineStyled } from "../../../styles/empresa/da
 import Navbar from "../../../components/navbar"
 
 interface ICliente {
+    id: number,
     nome: String,
     email: String,
     cpf: String
@@ -50,7 +51,7 @@ export default function Dashboard(){
                             <>Loading</>
                                 :
                             clientes.map(cliente => (
-                                <LineStyled key={cliente.cpf as Key}>
+                                <LineStyled key={cliente.cpf as Key} onClick={() => router.push("/empresa/dashboard/cliente/" + cliente.id)}>
                                     <div>
                                         <h3><b>NOME:</b> {cliente.nome}</h3>
                                         <p><b>CPF:</b> {cliente.cpf}</p>

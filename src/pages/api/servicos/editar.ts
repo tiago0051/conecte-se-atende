@@ -1,25 +1,21 @@
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { InsertCliente, UpdateCliente } from "../../../models/cliente";
+import { InsertServiço, UpdateServiço } from "../../../models/serviço";
 import { getUsuário } from "../../../models/usuario";
 
 interface IBody {
     token: string,
-    cliente: {
+    serviço: {
         id?: number,
         nome: string,
-        cpf: string,
-        email: string,
-        whatsapp: string,
-        telefone: string,
-        endereço: string,
-        aniversario: string,
+        descrição: string,
+        valor: number
     }
 }
 
 export default async function Editar(req: NextApiRequest, res: NextApiResponse){
-    const {token, cliente} : IBody = req.body
+    const {token, serviço} : IBody = req.body
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { data: number}
@@ -28,13 +24,13 @@ export default async function Editar(req: NextApiRequest, res: NextApiResponse){
             const usuário = await getUsuário(decoded.data)
     
             if(usuário.id_permissao > 1){
-                if(cliente.nome && cliente.email && cliente.whatsapp){
-                    const {id, nome, cpf, email, whatsapp, telefone, endereço, aniversario} = cliente
+                if(serviço.nome && serviço.descrição && serviço.valor){
+                    const {id, nome, descrição, valor} = serviço
 
                     if(id && id > 0){
-                        await UpdateCliente(id, nome, cpf, email, whatsapp, telefone, endereço, aniversario)
+                        await UpdateServiço(id, nome, descrição, valor)
                     }else{
-                        await InsertCliente(nome, email, cpf ? cpf : " ", whatsapp, telefone ? whatsapp : " ", usuário.id_empresa, endereço ? endereço : " ", aniversario ? aniversario : "")
+                        await InsertServiço(nome, descrição, valor, usuário.id_empresa)
                     }
         
                     return res.json({success: true})
