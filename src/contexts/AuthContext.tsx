@@ -55,7 +55,6 @@ export const AuthProvider:FC = ({ children }) => {
     async function signIn (usuário: String, senha: String): Promise<IUser | null> {
         return new Promise((resolve, reject) => {
             axios.post('/api/auth/login', {usuário: usuário, senha: senha}).then((response: IAxiosResponse) => {
-                console.log(response.data)
                 if(response.status == 200){
                     nookies.set({}, 'token', response.data.token, {maxAge: 60 * 60, path: '/'});
                     setUser(response.data.usuário);

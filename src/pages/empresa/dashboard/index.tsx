@@ -24,10 +24,10 @@ export default function Dashboard(){
     const [clientesList, setClientesList] = useState<ICliente[]>([])
     const [loading, setLoading] = useState(true)
 
-    const [codClienteAberto, setCodClienteAberto] = useState(0)
+    const [clienteAberto, setClienteAberto] = useState<{id: number, nome: String}>({id: 0, nome: ""})
 
     function fecharCliente(){
-        setCodClienteAberto(0)
+        setClienteAberto({id: 0, nome: ""})
     }
 
     useEffect(() => {
@@ -64,7 +64,7 @@ export default function Dashboard(){
                             <motion.h1 animate={{opacity: 1}} initial={{opacity: 0}} transition={{ease: "easeInOut", duration: 2}}>Loading</motion.h1>
                                 :
                             clientesList.map(cliente => (
-                                <motion.div key={cliente.cpf as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}} onClick={() => setCodClienteAberto(cliente.id)}>
+                                <motion.div key={cliente.cpf as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}} onClick={() => setClienteAberto({id: cliente.id, nome: cliente.nome})}>
                                     <LineStyled>
                                         <div>
                                             <h3><b>NOME:</b> {cliente.nome}</h3>
@@ -85,7 +85,7 @@ export default function Dashboard(){
             <motion.div style={{zIndex: 3}}>
                 <AnimatePresence>
                 {
-                    codClienteAberto > 0 && <Serviços clienteCod={codClienteAberto} setClienteCod={fecharCliente}/>
+                    clienteAberto.id > 0 && <Serviços cliente={clienteAberto} setClienteCod={fecharCliente}/>
                 }
                 </AnimatePresence>
             </motion.div>

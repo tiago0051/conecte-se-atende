@@ -1,7 +1,7 @@
 import { ServiçosPrestadosStyled } from "../../styles/empresa/dashboard"
 import { FiPlus, FiX } from "react-icons/fi"
 import { AnimatePresence, motion } from "framer-motion"
-import { InputHTMLAttributes, Key, MouseEventHandler, useEffect, useState } from "react"
+import { Key, useEffect, useState } from "react"
 import axios from "axios"
 import { parseCookies } from "nookies"
 
@@ -12,7 +12,7 @@ interface IServiço {
     valor: number,
 }
 
-export default function Servicos({clienteCod, setClienteCod}: {clienteCod: number, setClienteCod: () => void}) {
+export default function Servicos({cliente, setClienteCod}: {cliente: {id: number, nome: String}, setClienteCod: () => void}) {
     const [adicionar, setAdicionar] = useState(false)
 
     const [serviços, setServiços] = useState<IServiço[]>([])
@@ -26,7 +26,7 @@ export default function Servicos({clienteCod, setClienteCod}: {clienteCod: numbe
 
     useEffect(() => {
         setServiçosList(serviços)
-    }, [clienteCod])
+    }, [cliente])
 
     useEffect(() => {
         const {token} = parseCookies()
@@ -34,7 +34,7 @@ export default function Servicos({clienteCod, setClienteCod}: {clienteCod: numbe
             setServiços(response.data)
         })
 
-        axios.get("/api/clientes/" + clienteCod + "/servicos_recebidos", {headers: {Authorization: `${token}`}}).then((response) => {
+        axios.get("/api/clientes/" + cliente.id + "/servicos_recebidos", {headers: {Authorization: `${token}`}}).then((response) => {
             if(response.status == 200){
                 setServiçosRecebido(response.data)
             }
@@ -57,7 +57,7 @@ export default function Servicos({clienteCod, setClienteCod}: {clienteCod: numbe
             if(valorPago && valorPago > 0){
                 const {token} = parseCookies()
 
-                axios.post("/api/clientes/receber_servico", {serviço: serviçoSelecionado, valor: valorPago, clienteCod, token}).then((response) => {
+                axios.post("/api/clientes/receber_servico", {serviço: serviçoSelecionado, valor: valorPago, clienteCod: cliente.id, token}).then((response) => {
                     if(response.status == 200){
                         setAdicionar(false)
                         setValorPago(undefined)
@@ -95,7 +95,7 @@ export default function Servicos({clienteCod, setClienteCod}: {clienteCod: numbe
                     <motion.div animate={{rotateX: 0}} initial={{rotateX: 90}} transition={{ease: "easeInOut", duration: 0.4}} exit={{rotateX: 90}} key="moda2l">
                         <FiX onClick={() => setClienteCod()}>Teste</FiX>
 
-                        <h1>Tiago Salgado<button onClick={() => setAdicionar(a => !a)}><FiPlus/></button></h1>
+                        <h1>{cliente.nome}<button onClick={() => setAdicionar(a => !a)}><FiPlus/></button></h1>
 
                         <AnimatePresence>
                             {
