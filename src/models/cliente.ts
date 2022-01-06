@@ -99,3 +99,45 @@ export async function getClienteUsuários(id_empresa: number){
         })
     })
 }
+
+export async function ClienteRecebeServiço(id_cliente: number, id_serviço: number, valor: number){
+    const DB = await db();
+
+    return new Promise<Boolean>((resolve, reject) => {
+        DB.query(`INSERT INTO cliente_recebe_servico (id_servico, id_cliente, valor) VALUES (${id_serviço}, ${id_cliente}, '${valor}')`, (err, result) => {
+            if(err) reject(false)
+           resolve(true)
+        })
+    })
+}
+
+interface IServiço {
+    id: number,
+    nome: String,
+    descrição: String,
+    valor: number,
+}
+
+export async function ServiçosRecebido(id_cliente: number){
+    const DB = await db();
+
+    return new Promise<IServiço[]>((resolve, reject) => {
+        DB.query(`SELECT cliente_recebe_servico.id, cliente_recebe_servico.valor, servicos.nome, servicos.descricao FROM cliente_recebe_servico INNER JOIN servicos ON id_servico = servicos.id WHERE id_cliente = ${id_cliente}`, (err, result) => {
+            if(err) reject(err)
+           resolve(result.map((serviçoL: { id: number; nome: String; descricao: String; valor: number; }) => {
+               return {id: serviçoL.id, nome: serviçoL.nome, descrição: serviçoL.descricao, valor: serviçoL.valor}
+           }))
+        })
+    })
+}
+
+export async function deletServiçoRecebido(id_servico: number){
+    const DB = await db();
+
+    return new Promise<Boolean>((resolve, reject) => {
+        DB.query(`DELETE FROM cliente_recebe_servico WHERE id = ${id_servico}`, (err, result) => {
+            if(err) reject(false)
+           resolve(true)
+        })
+    })
+}

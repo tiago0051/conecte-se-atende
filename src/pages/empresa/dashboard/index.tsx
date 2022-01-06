@@ -4,7 +4,7 @@ import { FiUserPlus, FiSearch, FiEdit } from "react-icons/fi"
 import {useRouter} from "next/router"
 import axios from "axios"
 import { Key, useEffect, useState } from "react"
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 
 import { Container, SectionStyled, LineStyled } from "../../../styles/empresa/dashboard"
 import Navbar from "../../../components/navbar"
@@ -21,6 +21,7 @@ export default function Dashboard(){
     const router = useRouter()
 
     const [clientes, setClientes] = useState<ICliente[]>([])
+    const [clientesList, setClientesList] = useState<ICliente[]>([])
     const [loading, setLoading] = useState(true)
 
     const [codClienteAberto, setCodClienteAberto] = useState(0)
@@ -38,6 +39,10 @@ export default function Dashboard(){
         })
     }, [])
 
+    useEffect(() => {
+        setClientesList(clientes)
+    }, [clientes])
+
     return (
         <Container>
             <Navbar page="clientes"/>
@@ -50,7 +55,7 @@ export default function Dashboard(){
 
                 <main>
                     <label>
-                        <input type="text" placeholder="Pesquisar Cliente"/><FiSearch/>
+                        <input type="text" placeholder="Pesquisar Cliente" onChange={event => setClientesList(clientes.filter(cliente => cliente.nome.toLowerCase().includes(event.target.value.toLowerCase())))}/><FiSearch/>
                     </label>
 
                     <ul>
@@ -58,7 +63,7 @@ export default function Dashboard(){
                             loading ?
                             <motion.h1 animate={{opacity: 1}} initial={{opacity: 0}} transition={{ease: "easeInOut", duration: 2}}>Loading</motion.h1>
                                 :
-                            clientes.map(cliente => (
+                            clientesList.map(cliente => (
                                 <motion.div key={cliente.cpf as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}} onClick={() => setCodClienteAberto(cliente.id)}>
                                     <LineStyled>
                                         <div>
@@ -77,9 +82,13 @@ export default function Dashboard(){
                 </main>
             </SectionStyled>
 
-            {
-                codClienteAberto > 0 ? <Serviços clienteCod={codClienteAberto} setClienteCod={fecharCliente}/> : <></>
-            }
+            <motion.div style={{zIndex: 3}}>
+                <AnimatePresence>
+                {
+                    codClienteAberto > 0 && <Serviços clienteCod={codClienteAberto} setClienteCod={fecharCliente}/>
+                }
+                </AnimatePresence>
+            </motion.div>
         </Container>
     )
 }

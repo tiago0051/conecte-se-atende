@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 
-import { getCliente } from "../../../models/cliente";
-import { getUsuário } from "../../../models/usuario";
+import { getCliente } from "../../../../models/cliente";
+import { getUsuário } from "../../../../models/usuario";
 
 export default async function List(req: NextApiRequest, res: NextApiResponse){
     const {id} = req.query;

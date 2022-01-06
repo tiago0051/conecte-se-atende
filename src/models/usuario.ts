@@ -86,6 +86,24 @@ export async function UpdateUsuário(id: number, user: String, nome: String, ema
     })
 }
 
+export async function CadastrarSenhaUsuário(id: number, senha: string){
+    const DB = await db();
+
+    var sql = `UPDATE usuarios SET senha = '${encrypt(senha)}' WHERE id = ${id}`;
+
+    return new Promise<Boolean>((resolve, reject) => {
+        DB.query(sql, (err, result) => {
+            if(err)resolve(false)
+
+            if(result.affectedRows){
+                resolve(true)
+            }else{
+                resolve(false)
+            }
+        })
+    })
+}
+
 export function encrypt(senha: string){
     var hash = bcrypt.hashSync(senha, 10)
 

@@ -263,6 +263,7 @@ export const LineStyled = styled.li`
     div > svg {
         font-size: 2rem;
         transition: color 0.1s linear;
+        z-index: 2;
 
         :hover {
             color: ${props => props.theme.colors.secondary};
@@ -327,6 +328,7 @@ export const ServiçosPrestadosStyled = styled.main`
     justify-content: center;
     align-items: center;
     background-color: rgb(0, 0, 0, 0.8);
+    overflow: hidden;
 
     > div {
         width: 800px;
@@ -334,13 +336,130 @@ export const ServiçosPrestadosStyled = styled.main`
         background-color: ${props => props.theme.colors.background2};
         border-radius: 10px;
         position: relative;
+        padding: 20px;
 
         > svg {
             position: absolute;
             right: 20px;
             top: 20px;
-            font-size: 2.5rem;
             cursor: pointer;
+        }
+
+        > h1 {
+            margin-bottom: 2rem;
+            display: flex;
+
+            > button {
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                margin-left: 1rem;
+                border: 0;
+                background-color: ${props => props.theme.colors.secondary};
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                transition: filter 0.1s linear;
+
+                :hover {
+                    filter: brightness(1.2);
+                }
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            width: 70px;
+            padding: 5px;
+            background-color: ${props => props.theme.colors.secondary};
+            color: ${props => props.theme.colors.background2};
+            border: 1px solid ${props => props.theme.colors.border};
+        }
+
+        tr {
+            width: 100%;
+            margin: -10px 0;
+        }
+
+        td {
+            max-width: 0;
+            overflow: hidden;
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid ${props => props.theme.colors.border};
+        }
+
+        svg {
+            font-size: 1.5rem;
+            cursor: pointer;
+
+            :hover {
+                color: ${props => props.theme.colors.secondary};
+            }
+        }
+
+        > div {
+            > input {
+                border-radius: 20px;
+                font-size: 1.5rem;
+                padding: 5px 20px;
+                border: 1px solid ${props => props.theme.colors.border};
+                text-align: center;
+                margin-bottom: 1rem;
+
+                :focus {
+                    border: 1px solid ${props => props.theme.colors.secondary};
+                }
+
+                ::placeholder {
+                    text-align: center;
+                }
+            }
+
+            > div {
+                margin-top: 1rem;
+
+                p {
+                    font-size: 1.2rem;
+                    margin: 2rem 0;
+                }
+
+                > div {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 1rem;
+
+                    > input {
+                        border-radius: 5px;
+                        width: 150px;
+                        font-size: 1.5rem;
+                        padding: 0.5rem 10px;
+                        border: 1px solid ${props => props.theme.colors.border};
+                    }
+
+                    > button {
+                        background-color: ${props => props.theme.colors.secondary};
+                        border-radius: 5px;
+                        font-size: 2rem;
+                        color: ${props => props.theme.colors.background2};
+                        border: 0;
+                        padding: 5px 10px;
+                        cursor: pointer;
+
+                        :hover {
+                            filter: brightness(1.2);
+                        }
+                    }
+                }
+            }
         }
     }
 `
