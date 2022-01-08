@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 
 import db from '../services/db'
+import email from '../services/email'
 
 interface IUsuário {
     id: number,
@@ -22,6 +23,17 @@ export async function getUsuário(id: number){
 
     return new Promise<IUsuário>((resolve, reject) => {
         DB.query(`SELECT * FROM usuarios WHERE id = ${id}`, (err, result) => {
+            if(err) reject(err)
+           resolve(usuário(result[0].id, result[0].user, result[0].nome, result[0].email, result[0].id_empresa, result[0].id_permissao))
+        })
+    })
+}
+
+export async function getUsuárioByEmail(email: string){
+    const DB = await db();
+
+    return new Promise<IUsuário>((resolve, reject) => {
+        DB.query(`SELECT * FROM usuarios WHERE email = '${email}'`, (err, result) => {
             if(err) reject(err)
            resolve(usuário(result[0].id, result[0].user, result[0].nome, result[0].email, result[0].id_empresa, result[0].id_permissao))
         })
@@ -86,10 +98,10 @@ export async function UpdateUsuário(id: number, user: String, nome: String, ema
     })
 }
 
-export async function CadastrarSenhaUsuário(id: number, senha: string){
+export async function CadastrarSenhaUsuário(email: String, senha: string){
     const DB = await db();
 
-    var sql = `UPDATE usuarios SET senha = '${encrypt(senha)}' WHERE id = ${id}`;
+    var sql = `UPDATE usuarios SET senha = '${encrypt(senha)}' WHERE email = '${email}'`;
 
     return new Promise<Boolean>((resolve, reject) => {
         DB.query(sql, (err, result) => {
@@ -102,6 +114,18 @@ export async function CadastrarSenhaUsuário(id: number, senha: string){
             }
         })
     })
+}
+
+export async function EnviarEmailVerificação(emailL: string, token: String){
+    const info = await email.sendMail({
+        from: '"Conect-se Atende" <verificacao@devsoftbr.com>',
+        to: emailL,
+        subject: 'Verificação de conta',
+        text: `Olá, para verificar sua conta, clique no link abaixo:`,
+        html: `<p>Olá, para verificar sua conta, clique no link abaixo: <br/> <a href="https://conecte-se-atende.vercel.app/empresa/login/recuperar_senha/${token}">Clique aqui</a></p>`
+    })
+
+    return info;
 }
 
 export function encrypt(senha: string){

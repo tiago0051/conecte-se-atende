@@ -23,7 +23,9 @@ interface IUser {
 interface IAuthContext {
     user: IUser | null,
     isAuthenticated: boolean,
-    signIn(usuário: String, senha: String): Promise<IUser | null>
+    signIn(usuário: String, senha: String): Promise<IUser | null>,
+    enviarEmailRecuperação(email: String): void,
+    trocarSenha(token: string, senha: String): Promise<boolean>
 }
 
 export const AuthContext = createContext({} as IAuthContext);
@@ -67,8 +69,24 @@ export const AuthProvider:FC = ({ children }) => {
         })
     }
 
+    function enviarEmailRecuperação(email: String){
+        axios.post('/api/auth/verificar_email', {email: email})
+    }
+
+    async function trocarSenha(token: String, senha: String){
+        return new Promise<boolean>((resolve, reject) => {
+            axios.post('/api/auth/cadastrar', {token: token, senha: senha}).then(response => {
+                if(response.status == 200){
+                    resolve(true)
+                }else{
+                    reject(false)
+                }
+            })
+        })
+    }
+
   return (
-        <AuthContext.Provider value={{isAuthenticated, signIn, user}}>
+        <AuthContext.Provider value={{isAuthenticated, signIn, user, enviarEmailRecuperação, trocarSenha}}>
             {children}
         </AuthContext.Provider> 
   );

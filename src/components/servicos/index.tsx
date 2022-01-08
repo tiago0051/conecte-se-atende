@@ -26,7 +26,7 @@ export default function Servicos({cliente, setClienteCod}: {cliente: {id: number
 
     useEffect(() => {
         setServiçosList(serviços)
-    }, [cliente])
+    }, [serviços])
 
     useEffect(() => {
         const {token} = parseCookies()
