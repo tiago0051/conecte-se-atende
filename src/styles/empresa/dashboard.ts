@@ -278,6 +278,16 @@ export const ConfiguraçõesStyled = styled.main`
     width: 100%;
     height: 100vh;
 
+    > p {
+        color: ${props => props.theme.colors.text};
+        margin: 1rem 0;
+    }
+
+    > a {
+        margin-bottom: 1rem;
+        
+    }
+
     input {
         border-radius: 5px;
         width: 800px;
@@ -310,6 +320,12 @@ export const ConfiguraçõesStyled = styled.main`
         font-size: 1.5rem;
         width: 200px;
         padding: 10px;
+        cursor: pointer;
+        transition: filter 0.1s linear;
+
+        :hover {
+            filter: brightness(1.2);
+        }
     }
 
     input[type="submit"]{
@@ -318,6 +334,10 @@ export const ConfiguraçõesStyled = styled.main`
 
     @media (max-width: 768px) {
         input {
+            width: 100%;
+        }
+
+        textarea {
             width: 100%;
         }
     }
