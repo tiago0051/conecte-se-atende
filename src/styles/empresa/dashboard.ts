@@ -14,7 +14,6 @@ export const Container = styled.main`
         width: calc(100% - 250px);
         background-color: ${props => props.theme.colors.background};
         padding: 1rem 2rem;
-        overflow-y: scroll;
     }
     
     @media (max-width: 768px) {
@@ -26,13 +25,15 @@ export const Container = styled.main`
         }
 
         section:nth-child(2) {
-            width: 100%;
+            width: 100vw;
+            height: calc(100vh - 80px);
         }
     }
 `
 
 export const NavStyled = styled.nav`
     display: flex;
+    z-index: 1;
     flex-direction: column;
     align-items: center;
     background-color: ${props => props.theme.colors.secondary};
@@ -122,8 +123,7 @@ export const NavBarLink = styled.li<IPropsLink>`
 export const SectionStyled = styled.section`
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100vh;
+    overflow-y: scroll;
 
     header {
         display: flex;
@@ -199,6 +199,7 @@ export const SectionStyled = styled.section`
     }
 
     @media (max-width: 768px) {
+
         h1 {
             font-size: 2rem !important; 
         }
@@ -279,6 +280,12 @@ export const ConfiguraçõesStyled = styled.main`
 
     input {
         border-radius: 5px;
+        width: 800px;
+    }
+
+    textarea {
+        font-size: 1rem;
+        height: 10rem;
         width: 800px;
     }
 

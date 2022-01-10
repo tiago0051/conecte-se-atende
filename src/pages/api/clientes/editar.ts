@@ -15,6 +15,7 @@ interface IBody {
         telefone: string,
         endereço: string,
         aniversario: string,
+        obs: string
     }
 }
 
@@ -29,12 +30,12 @@ export default async function Editar(req: NextApiRequest, res: NextApiResponse){
     
             if(usuário.id_permissao > 1){
                 if(cliente.nome && cliente.email && cliente.whatsapp){
-                    const {id, nome, cpf, email, whatsapp, telefone, endereço, aniversario} = cliente
+                    const {id, nome, cpf, email, whatsapp, telefone, endereço, aniversario, obs} = cliente
 
                     if(id && id > 0){
-                        await UpdateCliente(id, nome, cpf, email, whatsapp, telefone, endereço, aniversario)
+                        await UpdateCliente(id, nome, cpf, email, whatsapp, telefone, endereço, aniversario, obs)
                     }else{
-                        await InsertCliente(nome, email, cpf ? cpf : " ", whatsapp, telefone ? whatsapp : " ", usuário.id_empresa, endereço ? endereço : " ", aniversario ? aniversario : "")
+                        await InsertCliente(nome, email, cpf ? cpf : " ", whatsapp, telefone ? whatsapp : " ", usuário.id_empresa, endereço ? endereço : " ", aniversario ? aniversario : " ", obs ? obs : " ")
                     }
         
                     return res.json({success: true})

@@ -14,6 +14,10 @@ const GlobalStyle = createGlobalStyle`
     input {
         outline: 0;
     }
+
+    textarea {
+        outline: 0;
+    }
 `
 
 export default GlobalStyle

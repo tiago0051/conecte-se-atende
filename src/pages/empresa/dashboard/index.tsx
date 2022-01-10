@@ -64,15 +64,15 @@ export default function Dashboard(){
                             <motion.h1 animate={{opacity: 1}} initial={{opacity: 0}} transition={{ease: "easeInOut", duration: 2}}>Loading</motion.h1>
                                 :
                             clientesList.map(cliente => (
-                                <motion.div key={cliente.cpf as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}} onClick={() => setClienteAberto({id: cliente.id, nome: cliente.nome})}>
+                                <motion.div key={cliente.cpf as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}}>
                                     <LineStyled>
-                                        <div>
+                                        <div onClick={() => setClienteAberto({id: cliente.id, nome: cliente.nome})}>
                                             <h3><b>NOME:</b> {cliente.nome}</h3>
                                             <p><b>CPF:</b> {cliente.cpf}</p>
                                         </div>
 
                                         <div>
-                                            <FiEdit onClick={() => router.push("/empresa/dashboard/cliente/" + cliente.id)}/>
+                                            <FiEdit onClick={() => { router.push("/empresa/dashboard/cliente/" + cliente.id); fecharCliente();}}/>
                                         </div>
                                     </LineStyled>
                                 </motion.div>
