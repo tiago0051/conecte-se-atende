@@ -11,8 +11,12 @@ export default async function Listar(req: NextApiRequest, res: NextApiResponse){
 
         if(decoded){
             const usuário = await getUsuário(decoded.data)
-    
-            return res.status(200).json(await getServiços(usuário.id_empresa))
+
+            if(usuário.id_permissao > 1){
+                return res.status(200).json(await getServiços(usuário.id_empresa))
+            }else{
+                return res.status(401).json({message: "Usuário não autorizado"})
+            }
         }else{
             return res.status(401).json({message: "Usuário não autorizado"})
         }
