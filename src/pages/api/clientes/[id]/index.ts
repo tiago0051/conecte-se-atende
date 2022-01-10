@@ -15,7 +15,7 @@ export default async function List(req: NextApiRequest, res: NextApiResponse){
             const cliente = await getCliente(Number.parseInt(id as string))
             const usuário = await getUsuário(cliente.id_usuário)
     
-            return res.status(200).json({nome: usuário.nome, cpf: cliente.cpf, email: usuário.email, whatsapp: cliente.whatsapp, telefone: cliente.telefone, endereço: cliente.endereço, aniversario: cliente.aniversario})
+            return res.status(200).json({nome: usuário.nome, cpf: cliente.cpf, email: usuário.email, whatsapp: cliente.whatsapp, telefone: cliente.telefone, endereço: cliente.endereço, aniversario: cliente.aniversario, obs: cliente.obs})
         }else{
             return res.status(401).json({message: "Usuário não autorizado"})
         }

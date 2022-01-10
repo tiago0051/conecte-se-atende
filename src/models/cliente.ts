@@ -10,10 +10,11 @@ interface ICliente {
     id_empresa: number,
     endereço: string,
     aniversario: string,
+    obs: String
 }
 
-const cliente = (id: number, id_usuário: number, cpf: String, whatsapp: String, telefone: String, id_empresa: number, endereço: String, aniversario: String) =>{
-    return <ICliente>{id, id_usuário, cpf, whatsapp, telefone, id_empresa, endereço, aniversario}
+const cliente = (id: number, id_usuário: number, cpf: String, whatsapp: String, telefone: String, id_empresa: number, endereço: String, aniversario: String, obs: String) =>{
+    return <ICliente>{id, id_usuário, cpf, whatsapp, telefone, id_empresa, endereço, aniversario, obs}
 }
 
 export default cliente
@@ -24,19 +25,19 @@ export async function getCliente(id: number){
     return new Promise<ICliente>((resolve, reject) => {
         DB.query(`SELECT * FROM clientes WHERE id = ${id}`, (err, result) => {
             if(err) reject(err)
-           resolve(cliente(result[0].id, result[0].id_usuario, result[0].cpf, result[0].whatsapp, result[0].tel, result[0].id_empresa, result[0].endereco, result[0].aniversario))
+           resolve(cliente(result[0].id, result[0].id_usuario, result[0].cpf, result[0].whatsapp, result[0].tel, result[0].id_empresa, result[0].endereco, result[0].aniversario, result[0].obs))
         })
     })
 }
 
-export async function InsertCliente(nome: String, email: String, cpf: string, whatsapp: string, telefone: string, id_empresa: number, endereço: string, aniversario: string){
+export async function InsertCliente(nome: String, email: String, cpf: string, whatsapp: string, telefone: string, id_empresa: number, endereço: string, aniversario: string, obs: String){
     const DB = await db();
 
     var usuário = await InsertUsuário(email, nome, email, id_empresa, 1)
 
     return new Promise<Boolean>((resolve, reject) => {
         if(usuário){
-            const sqlQuery = `INSERT INTO clientes (id_usuario, cpf, whatsapp, tel, id_empresa, endereco${aniversario != "" ? ", aniversario" : ""}) VALUES (${usuário.id}, '${cpf}', '${whatsapp}', '${telefone}', ${id_empresa}, '${endereço}'${aniversario != "" ? ", '" + aniversario + "'" : ""})`;
+            const sqlQuery = `INSERT INTO clientes (id_usuario, cpf, whatsapp, tel, id_empresa, endereco${aniversario != "" ? ", aniversario" : ""}, obs) VALUES (${usuário.id}, '${cpf}', '${whatsapp}', '${telefone}', ${id_empresa}, '${endereço}'${aniversario != "" ? ", '" + aniversario + "'" : ""}, '${obs}')`;
             DB.query(sqlQuery, (err, result) => {
                 if(err) resolve(false)
                resolve(true)
@@ -47,15 +48,17 @@ export async function InsertCliente(nome: String, email: String, cpf: string, wh
     })
 }
 
-export async function UpdateCliente(id: number, nome: string, cpf: string, email: string, whatsapp: string, telefone: string, endereço: string, aniversario: string){
+export async function UpdateCliente(id: number, nome: string, cpf: string, email: string, whatsapp: string, telefone: string, endereço: string, aniversario: string, obs: string){
     const DB = await db();
 
     return new Promise<Boolean>((resolve, reject) => {
-        DB.query(`UPDATE clientes SET cpf = '${cpf}', whatsapp = '${whatsapp}', tel = '${telefone}', endereco = '${endereço}', aniversario = '${aniversario}' WHERE id = ${id};`, (err, result) => {
+        DB.query(`UPDATE clientes SET cpf = '${cpf}', whatsapp = '${whatsapp}', tel = '${telefone}', endereco = '${endereço}', aniversario = '${aniversario}', obs = '${obs}' WHERE id = ${id};`, (err, result) => {
             if(err) reject(false)
+            console.log(err)
 
             DB.query(`SELECT * FROM clientes WHERE id = ${id};`, async (err, result) => {
                 if(err) reject(false)
+                console.log(err)
 
                 const usuário = await UpdateUsuário(result[0].id_usuario, email, nome, email)
 
@@ -80,8 +83,8 @@ export async function getClientes(id_empresa: number){
     return new Promise<ICliente[]>((resolve, reject) => {
         DB.query(`SELECT * FROM clientes WHERE id_empresa = ${id_empresa}`, (err, result) => {
             if(err) reject(err)
-           resolve(result.map((clienteL: { id: number; id_usuario: number; cpf: String; whatsapp: String; tel: String; id_empresa: number; endereço: String; aniversario: String; }) => {
-               return cliente(clienteL.id, clienteL.id_usuario, clienteL.cpf, clienteL.whatsapp, clienteL.tel, clienteL.id_empresa, clienteL.endereço, clienteL.aniversario)
+           resolve(result.map((clienteL: { id: number; id_usuario: number; cpf: String; whatsapp: String; tel: String; id_empresa: number; endereço: String; aniversario: String; obs: String }) => {
+               return cliente(clienteL.id, clienteL.id_usuario, clienteL.cpf, clienteL.whatsapp, clienteL.tel, clienteL.id_empresa, clienteL.endereço, clienteL.aniversario, clienteL.obs)
            }))
         })
     })

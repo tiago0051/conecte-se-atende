@@ -21,6 +21,7 @@ interface ICliente {
     telefone: string,
     endereço: string,
     aniversario: string,
+    obs: string
 }
 
 export default function Editar({idCliente} : IProps){
@@ -33,6 +34,7 @@ export default function Editar({idCliente} : IProps){
     const [telefone, setTelefone] = React.useState<string>();
     const [endereço, setEndereço] = React.useState<string>();
     const [aniversario, setAniversario] = React.useState<string>();
+    const [obs, setObs] = React.useState<string>();
 
     const [loading, setLoading] = React.useState(true);
 
@@ -47,6 +49,8 @@ export default function Editar({idCliente} : IProps){
 
                     const aniversario = response.data.aniversario.substring(0, 10)
 
+                    console.log(response.data)
+
                     setNome(response.data.nome);
                     setEmail(response.data.email);
                     setCpf(response.data.cpf);
@@ -54,6 +58,7 @@ export default function Editar({idCliente} : IProps){
                     setTelefone(response.data.telefone);
                     setEndereço(response.data.endereço);
                     setAniversario(aniversario);
+                    setObs(response.data.obs);
                     setLoading(false)
                 }
             })
@@ -74,6 +79,7 @@ export default function Editar({idCliente} : IProps){
             telefone,
             endereço,
             aniversario,
+            obs
         }
 
         axios.post("/api/clientes/editar", {token, cliente}).then((response) => {
@@ -123,6 +129,10 @@ export default function Editar({idCliente} : IProps){
 
                         <label>Data de Aniversario
                             <input type="date" defaultValue={aniversario} onChange={event => setAniversario(event.target.value)}/>
+                        </label>
+
+                        <label>Obervação
+                            <textarea defaultValue={obs} onChange={event => setObs(event.target.value)}/>
                         </label>
 
                         <input type="submit" id="salvar"/>
