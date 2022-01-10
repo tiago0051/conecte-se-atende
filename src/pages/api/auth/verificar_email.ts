@@ -9,7 +9,7 @@ export default async function VerificarEmail(req: NextApiRequest, res: NextApiRe
         data: email
       }, process.env.JWT_SECRET_EMAIL!, { expiresIn: 60 * 5 })
 
-    EnviarEmailVerificação(email as string, tokenEmail);
+    const info = await EnviarEmailVerificação(email as string, tokenEmail);
 
-    res.status(200).json({enviado: true});
+    res.status(200).json({enviado: true, info});
 }

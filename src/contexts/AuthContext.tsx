@@ -69,8 +69,16 @@ export const AuthProvider:FC = ({ children }) => {
         })
     }
 
-    function enviarEmailRecuperação(email: String){
-        axios.post('/api/auth/verificar_email', {email: email})
+    async function enviarEmailRecuperação(email: String){
+        return new Promise<boolean>((resolve, reject) => {
+            axios.post('/api/auth/verificar_email', {email: email}).then(response => {
+                if(response.status == 200){
+                    resolve(response.data)
+                }else{
+                    reject(response.data)
+                }
+            })
+        })
     }
 
     async function trocarSenha(token: String, senha: String){

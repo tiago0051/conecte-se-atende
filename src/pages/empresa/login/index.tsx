@@ -20,15 +20,15 @@ export default function Login(){
 
     const [recuperarSenha, setRecuperarSenha] = useState(false);
 
-    function handleSubmitLogar(event: React.FormEvent<HTMLFormElement>){
+    async function handleSubmitLogar(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
 
         if(recuperarSenha){
             if(email == ''){
                 setError('Preencha o campo de email')
             }else{
+                const info = await enviarEmailRecuperação(email)
                 setError('E-mail enviado com sucesso')
-                enviarEmailRecuperação(email)
             }
         }else{
             signIn(email, senha).then(response => {

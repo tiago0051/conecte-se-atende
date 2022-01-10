@@ -49,7 +49,7 @@ export default function RecuperarSenha({token} : {token: string}) {
                     Confirme a senha:
                     <input type="password" onChange={event => setSenhaConfirmação(event.target.value)}/>
                 </label>
-                <button type='submit'>Entrar <FiLogIn/></button>
+                <button type='submit'>Trocar Senha<FiLogIn/></button>
             </form>
         </MainStyled>
     )
