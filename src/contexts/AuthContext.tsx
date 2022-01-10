@@ -37,12 +37,12 @@ export const AuthProvider:FC = ({ children }) => {
     const isAuthenticated = !!user;
 
     useEffect(() => {
-        const {token} = parseCookies(null)
+        const {token} = parseCookies()
         
         if(token){
             axios.post('/api/auth/check', {token}).then(response => {
                 if(response.data.logado){
-                    setUser(response.data.empresa)
+                    setUser(response.data.usuário)
                 }else{
                     destroyCookie(null, 'token')
                     setUser(null)
