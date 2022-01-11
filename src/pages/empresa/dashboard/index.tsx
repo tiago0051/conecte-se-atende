@@ -9,6 +9,7 @@ import {AnimatePresence, motion} from "framer-motion";
 import { Container, SectionStyled, LineStyled } from "../../../styles/empresa/dashboard"
 import Navbar from "../../../components/navbar"
 import Serviços from "../../../components/servicos"
+import Loading from "../../../components/loading"
 
 interface ICliente {
     id: number,
@@ -61,7 +62,7 @@ export default function Dashboard(){
                     <ul>
                         {
                             loading ?
-                            <motion.h1 animate={{opacity: 1}} initial={{opacity: 0}} transition={{ease: "easeInOut", duration: 2}}>Loading</motion.h1>
+                            <motion.img animate={{opacity: 1}} initial={{opacity: 0}} transition={{ease: "easeInOut", duration: 2}} src="/loading.gif" style={{height: "200px", width: "200px"}}/>
                                 :
                             clientesList.map(cliente => (
                                 <motion.div key={cliente.cpf as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}}>

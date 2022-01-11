@@ -9,10 +9,13 @@ import {FiLogIn} from 'react-icons/fi'
 
 import {MainStyled} from '../../../../styles/empresa/login';
 import { AuthContext } from '../../../../contexts/AuthContext';
+import Loading from '../../../../components/loading';
 
 export default function RecuperarSenha({token} : {token: string}) {
     const {trocarSenha} = useContext(AuthContext)
     const router = useRouter();
+
+    const [loading, setLoading] = useState(false);
 
     const [senha, setSenha] = useState('');
     const [senhaConfirmação, setSenhaConfirmação] = useState('');
@@ -22,11 +25,13 @@ export default function RecuperarSenha({token} : {token: string}) {
         event.preventDefault();
 
         if(senha == senhaConfirmação){
+            setLoading(true)
             trocarSenha(token, senha).then(response => {
                 if(response){
                     router.push('/empresa/login')
                 }else{
                     setError('Erro ao trocar senha')
+                    setLoading(false)
                 }
             })
         }else{
@@ -51,6 +56,7 @@ export default function RecuperarSenha({token} : {token: string}) {
                 </label>
                 <button type='submit'>Trocar Senha<FiLogIn/></button>
             </form>
+            <Loading loading={loading}/>
         </MainStyled>
     )
 }

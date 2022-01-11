@@ -35,10 +35,11 @@ export default async function Login(req: NextApiRequest, res: NextApiResponse){
             data: usuárioL.id
           }, process.env.JWT_SECRET!, { expiresIn: 60 * 60 });
 
-        res.status(200).json({usuário: usuárioL, token})
+        res.status(200).json({usuário: usuárioL, token, logado: true})
     }else{
-        res.status(400).json({
-            "error": "Usuário ou senha inválidos"
+        res.json({
+            "error": "Usuário ou senha inválidos",
+            logado: false
         })
     }
 }

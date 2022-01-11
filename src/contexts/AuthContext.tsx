@@ -6,7 +6,8 @@ import { useRouter } from 'next/router'
 interface IAxiosResponse {
     data: {
         token: string,
-        usuário: IUser
+        usuário: IUser,
+        logado: boolean
     },
     status: number
 }
@@ -57,7 +58,7 @@ export const AuthProvider:FC = ({ children }) => {
     async function signIn (usuário: String, senha: String): Promise<IUser | null> {
         return new Promise((resolve, reject) => {
             axios.post('/api/auth/login', {usuário: usuário, senha: senha}).then((response: IAxiosResponse) => {
-                if(response.status == 200){
+                if(response.data.logado){
                     nookies.set({}, 'token', response.data.token, {maxAge: 60 * 60, path: '/'});
                     setUser(response.data.usuário);
                     resolve(response.data.usuário);

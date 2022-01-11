@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Image from 'next/image'
-import Link from 'next/link'
 import { useContext } from 'react';
 import { useRouter } from 'next/router'
 import { NextPageContext } from 'next';
@@ -9,10 +8,13 @@ import {FiLogIn} from 'react-icons/fi'
 
 import {MainStyled} from '../../../styles/empresa/login';
 import { AuthContext } from '../../../contexts/AuthContext';
+import Loading from '../../../components/loading';
 
 export default function Login(){
     const {signIn, enviarEmailRecuperação} = useContext(AuthContext)
     const router = useRouter();
+
+    const [loading, setLoading] = useState(false);
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
@@ -27,14 +29,18 @@ export default function Login(){
             if(email == ''){
                 setError('Preencha o campo de email')
             }else{
-                const info = await enviarEmailRecuperação(email)
+                setLoading(true)
+                await enviarEmailRecuperação(email)
+                setLoading(false)
                 setError('E-mail enviado com sucesso')
             }
         }else{
+            setLoading(true)
             signIn(email, senha).then(response => {
                 if(response){
                     router.push('/empresa/dashboard')
                 }else{
+                    setLoading(false)
                     setError('Usuário ou senha inválidos')
                 }
             })
@@ -60,15 +66,16 @@ export default function Login(){
                         </label>
                     )
                 }
-                <button type='submit' id='login'>{recuperarSenha ? "Enviar E-mail" : "Entrar"} <FiLogIn/></button>
+                <button type='submit' id='login' disabled={loading}>{recuperarSenha ? "Enviar E-mail" : "Entrar"} <FiLogIn/></button>
                 {
                     !recuperarSenha ? (
-                        <p><a href="#"onClick={() => setRecuperarSenha(true)}>Esqueceu sua senha?</a></p>
+                        <p><a href="#"onClick={() => {setRecuperarSenha(true); setError("");}}>Esqueceu sua senha?</a></p>
                     ) : (
-                        <p><a href="#"onClick={() => setRecuperarSenha(false)}>Voltar</a></p>
+                        <p><a href="#"onClick={() => {setRecuperarSenha(false); setError("");}}>Voltar</a></p>
                     )
                 }
             </form>
+            <Loading loading={loading}/>
         </MainStyled>
     )
 }
