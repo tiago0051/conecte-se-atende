@@ -35,7 +35,7 @@ export default async function Editar(req: NextApiRequest, res: NextApiResponse){
                     if(id && id > 0){
                         await UpdateCliente(id, nome, cpf, email, whatsapp, telefone, endereço, aniversario, obs)
                     }else{
-                        await InsertCliente(nome, email, cpf ? cpf : " ", whatsapp, telefone ? whatsapp : " ", usuário.id_empresa, endereço ? endereço : " ", aniversario ? aniversario : " ", obs ? obs : " ")
+                        await InsertCliente(nome, email, cpf ? cpf : " ", whatsapp, telefone ? whatsapp : " ", usuário.id_empresa, endereço ? endereço : " ", aniversario ? aniversario : "", obs ? obs : " ")
                     }
         
                     return res.json({success: true})

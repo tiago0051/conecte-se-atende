@@ -47,9 +47,10 @@ export default function Editar({idCliente} : IProps){
             axios.get(`/api/clientes/${idCliente}`, {headers: {authorization: token}}).then((response: {data: ICliente, status: number}) => {
                 if(response.status == 200){
 
-                    const aniversario = response.data.aniversario.substring(0, 10)
-
-                    console.log(response.data)
+                    if(response.data.aniversario != null){
+                        const aniversario = response.data.aniversario.substring(0, 10)
+                        setAniversario(aniversario);
+                    }
 
                     setNome(response.data.nome);
                     setEmail(response.data.email);
@@ -57,7 +58,6 @@ export default function Editar({idCliente} : IProps){
                     setWhatsapp(response.data.whatsapp);
                     setTelefone(response.data.telefone);
                     setEndereço(response.data.endereço);
-                    setAniversario(aniversario);
                     setObs(response.data.obs);
                     setLoading(false)
                 }

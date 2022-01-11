@@ -70,6 +70,7 @@ export async function InsertUsuário(user: String, nome: String, email: String, 
     return new Promise<IUsuário | null>((resolve, reject) => {
         DB.query(sql, (err, result) => {
             if(err)resolve(null)
+            console.log(err)
 
             if(result.insertId){
                 resolve(usuário(result.insertId, result.user, result.nome, result.email, result.id_empresa, result.id_permissao))
