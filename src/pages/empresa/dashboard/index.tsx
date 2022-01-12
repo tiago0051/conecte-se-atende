@@ -61,9 +61,7 @@ export default function Dashboard(){
 
                     <ul>
                         {
-                            loading ?
-                            <motion.img animate={{opacity: 1}} initial={{opacity: 0}} transition={{ease: "easeInOut", duration: 2}} src="/loading.gif" style={{height: "200px", width: "200px"}}/>
-                                :
+                            !loading &&
                             clientesList.map(cliente => (
                                 <motion.div key={cliente.cpf as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}}>
                                     <LineStyled>
@@ -90,6 +88,8 @@ export default function Dashboard(){
                 }
                 </AnimatePresence>
             </motion.div>
+
+            <Loading loading={loading}/>
         </Container>
     )
 }

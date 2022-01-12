@@ -8,12 +8,12 @@ export default function Loading(props : {loading: boolean}){
                 right: "20px", 
                 zIndex: "99999", 
                 display: (props.loading ? "block" : "none"),
-                width: "40px",
-                height: "40px",
+                width: "70px",
+                height: "70px",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
-                borderRadius: "50%"
+                borderRadius: "50%",
                 }}/>
         </>
     )

@@ -33,7 +33,7 @@ export default async function Login(req: NextApiRequest, res: NextApiResponse){
     if(usuárioL != null) {
         const token = jwt.sign({
             data: usuárioL.id
-          }, process.env.JWT_SECRET!, { expiresIn: 60 * 60 });
+          }, process.env.JWT_SECRET!, { expiresIn: '1d' });
 
         res.status(200).json({usuário: usuárioL, token, logado: true})
     }else{
