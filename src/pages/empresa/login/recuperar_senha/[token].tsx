@@ -56,7 +56,7 @@ export default function RecuperarSenha({token} : {token: string}) {
                 </label>
                 <button type='submit'>Trocar Senha<FiLogIn/></button>
             </form>
-            <Loading loading={loading}/>
+            <Loading loading={loading.toString()}/>
         </MainStyled>
     )
 }
