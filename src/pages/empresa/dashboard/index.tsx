@@ -78,6 +78,7 @@ export default function Dashboard(){
                             ))
                         }
                     </ul>
+                    <Loading loading={loading.toString()}/>
                 </main>
             </SectionStyled>
 
@@ -88,8 +89,6 @@ export default function Dashboard(){
                 }
                 </AnimatePresence>
             </motion.div>
-
-            <Loading loading={loading}/>
         </Container>
     )
 }

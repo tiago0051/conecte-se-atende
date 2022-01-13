@@ -8,6 +8,7 @@ import axios from "axios"
 import Navbar from "../../../components/navbar"
 import { Container, LineStyled, SectionStyled } from "../../../styles/empresa/dashboard"
 import { motion } from "framer-motion"
+import Loading from "../../../components/loading"
 
 interface IServiço {
     id: number,
@@ -53,8 +54,7 @@ export default function Serviços(){
 
                     <ul>
                         {
-                            loading ? <motion.h1 animate={{opacity: 1}} initial={{opacity: 0}} transition={{ease: "easeInOut", duration: 2}}>Loading</motion.h1>
-                            :
+                            !loading &&
                             serviçosList.map(serviço => (
                                 <motion.div key={serviço.id as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}}>
                                     <LineStyled onClick={() => router.push("/empresa/dashboard/servico/" + serviço.id)}>
@@ -76,6 +76,7 @@ export default function Serviços(){
                             )) 
                         }
                     </ul>
+                    <Loading loading={loading.toString()}/>
                 </main>
             </SectionStyled>
         </Container>

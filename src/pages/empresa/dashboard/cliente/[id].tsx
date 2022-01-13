@@ -66,6 +66,8 @@ export default function Editar({idCliente} : IProps){
     }, [])
 
     function handleSubmit(event: React.SyntheticEvent){
+        setLoading(true)
+
         event.preventDefault()
 
         const {token} = parseCookies()
@@ -85,6 +87,7 @@ export default function Editar({idCliente} : IProps){
         axios.post("/api/clientes/editar", {token, cliente}).then((response) => {
             if(response.status == 500){
                 alert("Erro ao salvar")
+                setLoading(false)
             }else{
                 router.push("/empresa/dashboard")
             }
@@ -98,7 +101,7 @@ export default function Editar({idCliente} : IProps){
             <SectionStyled>
                 <header>
                     <h1>{idCliente != 0 ? "Editar Cliente" : "Novo Cliente"}</h1>
-                    <button onClick={() => {(document.getElementById("salvar") as HTMLInputElement).click(); (document.getElementById("salvar") as HTMLInputElement).disabled = true}}><FiSave/>Salvar</button>
+                    <button onClick={() => {(document.getElementById("salvar") as HTMLInputElement).click()}}><FiSave/>Salvar</button>
                 </header>
 
                 <ConfiguraçõesStyled>
@@ -135,7 +138,7 @@ export default function Editar({idCliente} : IProps){
                             <textarea defaultValue={obs} onChange={event => setObs(event.target.value)}/>
                         </label>
 
-                        <input type="submit" id="salvar"/>
+                        <input type="submit" id="salvar" disabled={loading}/>
                     </motion.form>
                 </ConfiguraçõesStyled>
             </SectionStyled>

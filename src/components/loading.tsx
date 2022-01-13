@@ -1,20 +1,28 @@
-export default function Loading(props : {loading: boolean}){
+import Image from "next/image";
+import styled from "styled-components";
+
+interface IContainer {
+    loading?: string
+}
+
+const Container = styled.div<IContainer>`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 99999;
+    display: ${props => props.loading == "true" ? "flex" : "none"};
+    justify-content: "center";
+    align-items: "center";
+
+    span {
+        border-radius: 50% !important;
+    }
+`
+
+export default function Loading(props : {loading: string}){
     return(
-        <>
-            <div className="loading" style={{
-                backgroundImage: "url(/loading.gif)", 
-                position: "absolute", 
-                bottom: "20px", 
-                right: "20px", 
-                zIndex: "99999", 
-                display: (props.loading ? "block" : "none"),
-                width: "70px",
-                height: "70px",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                borderRadius: "50%",
-                }}/>
-        </>
+        <Container loading={props.loading}>
+            <Image src="/loading.gif" alt="Carregando..." width={100} height={100} layout={"fixed"}/>
+        </Container>
     )
 }

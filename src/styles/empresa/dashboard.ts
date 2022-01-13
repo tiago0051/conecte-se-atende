@@ -125,6 +125,11 @@ export const SectionStyled = styled.section`
     flex-direction: column;
     overflow-y: scroll;
 
+    main {
+        position: relative;
+        min-height: 80%;
+    }
+
     header {
         display: flex;
         flex-direction: row;

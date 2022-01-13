@@ -75,7 +75,7 @@ export default function Login(){
                     )
                 }
             </form>
-            <Loading loading={loading}/>
+            <Loading loading={loading.toString()}/>
         </MainStyled>
     )
 }
