@@ -49,32 +49,36 @@ export default function Login(){
 
     return (
         <MainStyled>
-            <form onSubmit={handleSubmitLogar}>
-                <Image src='/logo-laranja.svg' alt='Logo' width='150' height='150' />
-
-                <h1>Login <br/><b style={{fontSize: "1rem"}}>{error}</b></h1>
-
-                <label>
-                    E-mail:
-                    <input type="email" onChange={event => setEmail(event.target.value)}/>
-                </label>
-                {
-                    !recuperarSenha && (
+            {
+                !loading && (
+                    <form onSubmit={handleSubmitLogar}>
+                        <Image src='/logo-laranja.svg' alt='Logo' width='150' height='150' />
+        
+                        <h1>Login <br/><b style={{fontSize: "1rem"}}>{error}</b></h1>
+        
                         <label>
-                            Senha:
-                            <input type="password" onChange={event => setSenha(event.target.value)}/>
+                            E-mail:
+                            <input type="email" onChange={event => setEmail(event.target.value)}/>
                         </label>
-                    )
-                }
-                <button type='submit' id='login' disabled={loading}>{recuperarSenha ? "Enviar E-mail" : "Entrar"} <FiLogIn/></button>
-                {
-                    !recuperarSenha ? (
-                        <p><a href="#"onClick={() => {setRecuperarSenha(true); setError("");}}>Esqueceu sua senha?</a></p>
-                    ) : (
-                        <p><a href="#"onClick={() => {setRecuperarSenha(false); setError("");}}>Voltar</a></p>
-                    )
-                }
-            </form>
+                        {
+                            !recuperarSenha && (
+                                <label>
+                                    Senha:
+                                    <input type="password" onChange={event => setSenha(event.target.value)}/>
+                                </label>
+                            )
+                        }
+                        <button type='submit' id='login' disabled={loading}>{recuperarSenha ? "Enviar E-mail" : "Entrar"} <FiLogIn/></button>
+                        {
+                            !recuperarSenha ? (
+                                <p><a href="#"onClick={() => {setRecuperarSenha(true); setError("");}}>Esqueceu sua senha?</a></p>
+                            ) : (
+                                <p><a href="#"onClick={() => {setRecuperarSenha(false); setError("");}}>Voltar</a></p>
+                            )
+                        }
+                    </form>
+                )
+            }
             <Loading loading={loading.toString()}/>
         </MainStyled>
     )

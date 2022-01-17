@@ -7,12 +7,14 @@ interface IContainer {
 
 const Container = styled.div<IContainer>`
     position: absolute;
-    bottom: 0;
-    right: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 99999;
     display: ${props => props.loading == "true" ? "flex" : "none"};
-    justify-content: "center";
-    align-items: "center";
+    justify-content: center;
+    align-items: center;
 
     span {
         border-radius: 50% !important;
@@ -22,7 +24,7 @@ const Container = styled.div<IContainer>`
 export default function Loading(props : {loading: string}){
     return(
         <Container loading={props.loading}>
-            <Image src="/loading.gif" alt="Carregando..." width={100} height={100} layout={"fixed"}/>
+            <Image src="/loading.gif" alt="Carregando..." width={300} height={300} layout={"fixed"}/>
         </Container>
     )
 }
