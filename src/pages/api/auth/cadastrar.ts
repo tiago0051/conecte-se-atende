@@ -8,23 +8,30 @@ export default async function CadastrarSenha(req: NextApiRequest, res: NextApiRe
     if(token && senha){
         try {
             const decoded = jwt.verify(token!, process.env.JWT_SECRET_EMAIL!) as {data: string};
-    
-            const usuário = await getUsuárioByEmail(decoded.data)
-    
-            const verify = await CadastrarSenhaUsuário(usuário.email, senha)
 
-            if(verify){
-                res.status(200).json({
-                    status: "success",
-                    message: "Usuário cadastrado com sucesso"
-                })
-            }else{
+            getUsuárioByEmail(decoded.data).then(async (usuário) => {
+                const verify = await CadastrarSenhaUsuário(usuário.email, senha)
+
+                if(verify){
+                    res.status(200).json({
+                        status: "success",
+                        message: "Usuário cadastrado com sucesso"
+                    })
+                }else{
+                    res.status(500).json({
+                        status: "error",
+                        message: "Erro ao cadastrar usuário"
+                    })
+                }
+            }).catch(error => {
                 res.status(500).json({
                     status: "error",
-                    message: "Erro ao cadastrar usuário"
+                    message: "Erro ao buscar usuário: " + error.message,
+                    error
                 })
-            }
-        }catch{
+            })
+        }catch (error){
+            console.log(error)
             res.status(401).json({
                 status: 'error',
                 message: 'Usuário não autorizado'

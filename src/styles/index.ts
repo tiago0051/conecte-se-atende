@@ -10,7 +10,7 @@ export const Main = styled.main`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
 
     form {
         background-color: white;
