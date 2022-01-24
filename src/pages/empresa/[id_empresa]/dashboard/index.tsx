@@ -6,10 +6,11 @@ import axios from "axios"
 import { Key, useEffect, useState } from "react"
 import {AnimatePresence, motion} from "framer-motion";
 
-import { Container, SectionStyled, LineStyled } from "../../../styles/empresa/dashboard"
-import Navbar from "../../../components/navbar"
-import Serviços from "../../../components/servicos"
-import Loading from "../../../components/loading"
+import { Container, SectionStyled, LineStyled } from "../../../../styles/empresa/dashboard"
+import Navbar from "../../../../components/navbar"
+import Serviços from "../../../../components/servicos"
+import Loading from "../../../../components/loading"
+import Head from "next/head"
 
 interface ICliente {
     id: number,
@@ -18,7 +19,7 @@ interface ICliente {
     cpf: String
 }
 
-export default function Dashboard(){
+export default function Dashboard(props : {id_empresa: number}){
     const router = useRouter()
 
     const [clientes, setClientes] = useState<ICliente[]>([])
@@ -34,9 +35,11 @@ export default function Dashboard(){
     useEffect(() => {
         const {token} = parseCookies()
 
-        axios.get("/api/clientes/listar", {headers: {Authorization: `${token}`}}).then(response => {
-            setClientes(response.data)
-            setLoading(false)
+        axios.get("/api/clientes/0", {headers: {Authorization: `${token}`, id_empresa: props.id_empresa + ""}}).then(response => {
+            if(response.data.success){
+                setClientes(response.data.clientes)
+                setLoading(false)
+            }
         })
     }, [])
 
@@ -46,12 +49,15 @@ export default function Dashboard(){
 
     return (
         <Container>
-            <Navbar page="clientes"/>
+            <Head>
+                <title>Dashboard</title>
+            </Head>
+            <Navbar page="clientes" id_empresa={props.id_empresa}/>
 
             <SectionStyled>
                 <header>
                     <h1>Clientes</h1>
-                    <button onClick={() => router.push("/empresa/dashboard/cliente/0")}><FiUserPlus/>Adicionar Cliente</button>
+                    <button onClick={() => router.push("/empresa/"+ props.id_empresa +"/dashboard/cliente/0")}><FiUserPlus/>Adicionar Cliente</button>
                 </header>
 
                 <main>
@@ -71,7 +77,7 @@ export default function Dashboard(){
                                         </div>
 
                                         <div>
-                                            <FiEdit onClick={() => { router.push("/empresa/dashboard/cliente/" + cliente.id); fecharCliente();}}/>
+                                            <FiEdit onClick={() => { router.push(`/empresa/${props.id_empresa}/dashboard/cliente/` + cliente.id); fecharCliente();}}/>
                                         </div>
                                     </LineStyled>
                                 </motion.div>
@@ -85,7 +91,7 @@ export default function Dashboard(){
             <motion.div style={{zIndex: 3}}>
                 <AnimatePresence>
                 {
-                    clienteAberto.id > 0 && <Serviços cliente={clienteAberto} setClienteCod={fecharCliente}/>
+                    clienteAberto.id > 0 && <Serviços cliente={clienteAberto} id_empresa={props.id_empresa} setClienteCod={fecharCliente}/>
                 }
                 </AnimatePresence>
             </motion.div>
@@ -95,6 +101,9 @@ export default function Dashboard(){
 
 export async function getServerSideProps(ctx: NextPageContext){
     const {token} = parseCookies(ctx)
+
+    var id_empresa = parseInt(ctx.query.id_empresa as string);
+
     if(!token){
         return {
             redirect: {
@@ -105,6 +114,6 @@ export async function getServerSideProps(ctx: NextPageContext){
     }
 
     return {
-        props: {}
+        props: {id_empresa}
     }
 }

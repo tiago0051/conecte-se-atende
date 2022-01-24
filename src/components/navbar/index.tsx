@@ -5,7 +5,8 @@ import { FaUser, FaHandshake, FaCalendarWeek } from "react-icons/fa"
 import { NavStyled, NavBarLink } from "../../styles/empresa/dashboard"
 
 interface INavBarProps {
-    page: string
+    page: string,
+    id_empresa: number
 }
 
 export default function Navbar(Props: INavBarProps) {
@@ -16,13 +17,13 @@ export default function Navbar(Props: INavBarProps) {
             </div>
 
             <ul>
-                <NavBarLink selected={Props.page == "clientes"}><FaUser/><Link href="/empresa/dashboard">Clientes</Link></NavBarLink>
-                <NavBarLink selected={Props.page == "serviços"}><FaHandshake/><Link href="/empresa/dashboard/servicos">Serviços</Link></NavBarLink>
-                <NavBarLink selected={Props.page == "agenda"}><FaCalendarWeek/><Link href="/empresa/dashboard/agenda">Agenda</Link></NavBarLink>
+                <NavBarLink selected={Props.page == "clientes"}><FaUser/><Link href={"/empresa/"+ Props.id_empresa +"/dashboard"}>Clientes</Link></NavBarLink>
+                <NavBarLink selected={Props.page == "serviços"}><FaHandshake/><Link href={"/empresa/"+ Props.id_empresa +"/dashboard/servicos"}>Serviços</Link></NavBarLink>
+                <NavBarLink selected={Props.page == "agenda"}><FaCalendarWeek/><Link href={"/empresa/"+ Props.id_empresa +"/dashboard/agenda"}>Agenda</Link></NavBarLink>
             </ul>
             
             <ul>
-                <NavBarLink selected={Props.page == "configurações"}><Link href="/empresa/dashboard/configuracoes">Configurações</Link></NavBarLink>
+                <NavBarLink selected={Props.page == "configurações"}><Link href={"/empresa/"+ Props.id_empresa +"/dashboard/configuracoes"}>Configurações</Link></NavBarLink>
                 <li><Link href="/empresa/login">Sair</Link></li>
             </ul>
         </NavStyled>

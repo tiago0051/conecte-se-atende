@@ -4,18 +4,22 @@ import { parseCookies } from "nookies";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { FiSave } from "react-icons/fi";
 import { useRouter } from "next/router";
-import Navbar from "../../../../components/navbar";
-import { ConfiguraçõesStyled, Container, SectionStyled } from "../../../../styles/empresa/dashboard";
+import Navbar from "../../../../../components/navbar";
+import { ConfiguraçõesStyled, Container, SectionStyled } from "../../../../../styles/empresa/dashboard";
 import { motion } from "framer-motion";
 
 interface IServiço {
-    id: number,
-    nome: string,
-    descrição: string,
-    valor: number,
+    success: boolean,
+    mensagem: string,
+    serviço: {
+        id: number,
+        nome: string,
+        descrição: string,
+        valor: number,
+    }
 }
 
-export default function Editar({idServiço} : {idServiço: number}) {
+export default function Editar({idServiço, id_empresa} : {idServiço: number, id_empresa: number}) {
     const router = useRouter()
 
     const [nome, setNome] = useState<string>()
@@ -29,11 +33,11 @@ export default function Editar({idServiço} : {idServiço: number}) {
         if(idServiço === 0){
             setLoading(false)
         }else if(idServiço > 0){
-            axios.get(`/api/servicos/${idServiço}`, {headers: {authorization: token}}).then((response: {data: IServiço, status: number}) => {
-                if(response.status == 200){
-                    setNome(response.data.nome);
-                    setDescrição(response.data.descrição)
-                    setValor(response.data.valor)
+            axios.get(`/api/servicos/${idServiço}`, {headers: {authorization: token, id_empresa: id_empresa + ""}}).then((response: {data: IServiço, status: number}) => {
+                if(response.data.success){
+                    setNome(response.data.serviço.nome);
+                    setDescrição(response.data.serviço.descrição)
+                    setValor(response.data.serviço.valor)
                     setLoading(false)
                 }
             })
@@ -52,18 +56,18 @@ export default function Editar({idServiço} : {idServiço: number}) {
             valor
         }
 
-        axios.post("/api/servicos/editar", {token, serviço}).then((response) => {
+        axios.put(`/api/servicos/${idServiço}`, serviço, {headers: {Authorization: token, id_empresa: id_empresa + ""}}).then((response) => {
             if(response.status == 500){
                 alert("Erro ao salvar")
             }else{
-                router.push("/empresa/dashboard/servicos")
+                router.back()
             }
         })
     }
 
     return(
         <Container>
-            <Navbar page="serviço"/>
+            <Navbar page="serviço" id_empresa={id_empresa}/>
 
             <SectionStyled>
                 <header>
@@ -105,12 +109,14 @@ export function getServerSideProps(ctx: NextPageContext){
     }
 
     var idServiço = parseInt(ctx.query.id as string);
+    var id_empresa = parseInt(ctx.query.id_empresa as string);
     
     if(!idServiço)idServiço = 0
 
     return {
         props: {
-            idServiço
+            idServiço,
+            id_empresa
         }
     }
 }

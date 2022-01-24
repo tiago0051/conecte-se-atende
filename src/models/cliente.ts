@@ -19,13 +19,16 @@ const cliente = (id: number, id_usuário: number, cpf: String, whatsapp: String,
 
 export default cliente
 
-export async function getCliente(id: number){
+export async function getCliente(id: number, id_empresa: number){
     const DB = await db();
 
     return new Promise<ICliente>((resolve, reject) => {
-        DB.query(`SELECT * FROM clientes WHERE id = ${id}`, (err, result) => {
-            if(err) reject(err)
-           resolve(cliente(result[0].id, result[0].id_usuario, result[0].cpf, result[0].whatsapp, result[0].tel, result[0].id_empresa, result[0].endereco, result[0].aniversario, result[0].obs))
+        DB.query(`SELECT * FROM clientes WHERE id = ${id} AND id_empresa = ${id_empresa}`, (err, result) => {
+            if(err) return reject(err)
+
+            if(result.length == 0) return reject(new Error("Cliente não encontrado"))
+
+            resolve(cliente(result[0].id, result[0].id_usuario, result[0].cpf, result[0].whatsapp, result[0].tel, result[0].id_empresa, result[0].endereco, result[0].aniversario, result[0].obs))
         })
     })
 }
@@ -48,32 +51,31 @@ export async function InsertCliente(nome: String, email: String, cpf: string, wh
     })
 }
 
-export async function UpdateCliente(id: number, nome: string, cpf: string, email: string, whatsapp: string, telefone: string, endereço: string, aniversario: string, obs: string){
+export async function UpdateCliente(id: number, nome: string, cpf: string, email: string, whatsapp: string, telefone: string, endereço: string, aniversario: string, obs: string, id_empresa: number){
     const DB = await db();
 
-    return new Promise<Boolean>((resolve, reject) => {
-        DB.query(`UPDATE clientes SET cpf = '${cpf}', whatsapp = '${whatsapp}', tel = '${telefone}', endereco = '${endereço}', aniversario = '${aniversario}', obs = '${obs}' WHERE id = ${id};`, (err, result) => {
-            if(err) reject(false)
-            console.log(err)
+    return new Promise((resolve, reject) => {
+        DB.query(`UPDATE clientes SET cpf = '${cpf}', whatsapp = '${whatsapp}', tel = '${telefone}', endereco = '${endereço}', aniversario = '${aniversario}', obs = '${obs}' WHERE id = '${id}' AND id_empresa = '${id_empresa}';`, (err, result) => {
+            if(err) return reject(err)
+
+            if(result.affectedRows == 0)
+                reject(new Error("Cliente não encontrado"))
 
             DB.query(`SELECT * FROM clientes WHERE id = ${id};`, async (err, result) => {
-                if(err) reject(false)
-                console.log(err)
+                if(err) return reject(err)
 
-                const usuário = await UpdateUsuário(result[0].id_usuario, email, nome, email)
-
-                if(usuário){
+                UpdateUsuário(result[0].id_usuario, email, nome, email).then(() => {
                     resolve(true)
-                }else{
-                    reject(false)
-                }
+                }).catch((error => {
+                    reject(error)
+                }))
             })
             
         })
     })
 }
 
-export async function getClienteUsuário(cliente: ICliente){
+export async function getClienteUsuário(cliente: ICliente, id_empresa: number){
     return {cliente, usuário: await getUsuário(cliente.id_usuário)}
 }
 
@@ -94,7 +96,7 @@ export async function getClienteUsuários(id_empresa: number){
     const DB = await db();
 
     return new Promise<{nome: String, email: String, cpf: String}[]>((resolve, reject) => {
-        DB.query(`SELECT usuarios.nome, usuarios.email, clientes.cpf, clientes.id FROM clientes INNER JOIN usuarios ON id_usuario = usuarios.id WHERE usuarios.id_empresa = ${id_empresa};`, (err, result) => {
+        DB.query(`SELECT usuarios.nome, usuarios.email, clientes.cpf, clientes.id FROM clientes INNER JOIN usuarios ON id_usuario = usuarios.id WHERE clientes.id_empresa = ${id_empresa};`, (err, result) => {
             if(err) reject(err)
            resolve(result.map((clienteL: { nome: String; email: String; cpf: String, id: number}) => {
                return {id: clienteL.id, nome: clienteL.nome, email: clienteL.email, cpf: clienteL.cpf}
@@ -121,11 +123,11 @@ interface IServiço {
     valor: number,
 }
 
-export async function ServiçosRecebido(id_cliente: number){
+export async function ServiçosRecebido(id_cliente: number, id_empresa: number){
     const DB = await db();
 
     return new Promise<IServiço[]>((resolve, reject) => {
-        DB.query(`SELECT cliente_recebe_servico.id, cliente_recebe_servico.valor, servicos.nome, servicos.descricao FROM cliente_recebe_servico INNER JOIN servicos ON id_servico = servicos.id WHERE id_cliente = ${id_cliente}`, (err, result) => {
+        DB.query(`SELECT cliente_recebe_servico.id, cliente_recebe_servico.valor, servicos.nome, servicos.descricao FROM cliente_recebe_servico INNER JOIN servicos ON id_servico = servicos.id WHERE id_cliente = ${id_cliente} AND id_empresa = ${id_empresa};`, (err, result) => {
             if(err) reject(err)
            resolve(result.map((serviçoL: { id: number; nome: String; descricao: String; valor: number; }) => {
                return {id: serviçoL.id, nome: serviçoL.nome, descrição: serviçoL.descricao, valor: serviçoL.valor}
@@ -134,13 +136,17 @@ export async function ServiçosRecebido(id_cliente: number){
     })
 }
 
-export async function deletServiçoRecebido(id_servico: number){
+export async function deleteServiçoRecebido(id_servico_recebido: number, id_cliente: number){
     const DB = await db();
 
     return new Promise<Boolean>((resolve, reject) => {
-        DB.query(`DELETE FROM cliente_recebe_servico WHERE id = ${id_servico}`, (err, result) => {
-            if(err) reject(false)
-           resolve(true)
+        DB.query(`DELETE FROM cliente_recebe_servico WHERE id = '${id_servico_recebido}' AND id_cliente = '${id_cliente}'`, (err, result) => {
+            if(err) return reject(err)
+
+            if(result.affectedRows == 0)
+                return reject(new Error("Não foi possível deletar o serviço"))
+
+            return resolve(true)
         })
     })
 }

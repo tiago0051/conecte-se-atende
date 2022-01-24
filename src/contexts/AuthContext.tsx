@@ -84,6 +84,7 @@ export const AuthProvider:FC = ({ children }) => {
 
     async function trocarSenha(token: String, senha: String){
         return new Promise<boolean>((resolve, reject) => {
+            console.log("a")
             axios.post('/api/auth/cadastrar', {token: token, senha: senha}).then(response => {
                 if(response.status == 200){
                     resolve(true)

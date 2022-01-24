@@ -26,6 +26,20 @@ export async function getEmpresa(id: number){
     })
 }
 
+export async function getEmpresaByEmail(email: string){
+    const DB = await db();
+
+    return new Promise<IEmpresa | null>((resolve, reject) => {
+        DB.query(`SELECT * FROM empresas WHERE email = '${email}'`, (err, result) => {
+            if(err) reject(null)
+
+            if(result.length === 0) return resolve(null)
+
+            return resolve(empresa(result[0].id, result[0].nome, result[0].razao_social, result[0].cnpj, result[0].email, result[0].tel))
+        })
+    })
+}
+
 export async function InsertEmpresa(nome: string, razao_social: string, cnpj: string, email: string, tel: string){
     const DB = await db();
 

@@ -5,12 +5,13 @@ import React, { useEffect } from "react";
 import { FiSave } from "react-icons/fi";
 import { useRouter } from "next/router";
 
-import Navbar from "../../../../components/navbar";
-import { Container, SectionStyled, ConfiguraçõesStyled } from "../../../../styles/empresa/dashboard";
+import Navbar from "../../../../../components/navbar";
+import { Container, SectionStyled, ConfiguraçõesStyled } from "../../../../../styles/empresa/dashboard";
 import { motion } from "framer-motion";
 
 interface IProps {
-    idCliente: number; 
+    idCliente: number,
+    id_empresa: number 
 }
 
 interface ICliente {
@@ -24,7 +25,7 @@ interface ICliente {
     obs: string
 }
 
-export default function Editar({idCliente} : IProps){
+export default function Editar({idCliente, id_empresa} : IProps){
     const router = useRouter();
 
     const [nome, setNome] = React.useState<string>();
@@ -44,7 +45,7 @@ export default function Editar({idCliente} : IProps){
         if(idCliente === 0){
             setLoading(false)
         }else if(idCliente > 0){
-            axios.get(`/api/clientes/${idCliente}`, {headers: {authorization: token}}).then((response: {data: ICliente, status: number}) => {
+            axios.get(`/api/clientes/${idCliente}`, {headers: {authorization: token, id_empresa: id_empresa + ""}}).then((response: {data: ICliente, status: number}) => {
                 if(response.status == 200){
 
                     if(response.data.aniversario != null){
@@ -84,19 +85,19 @@ export default function Editar({idCliente} : IProps){
             obs
         }
 
-        axios.post("/api/clientes/editar", {token, cliente}).then((response) => {
+        axios.put(`/api/clientes/${idCliente}`, cliente, {headers: {authorization: token, id_empresa: id_empresa + ""}}).then((response) => {
             if(response.status == 500){
                 alert("Erro ao salvar")
                 setLoading(false)
             }else{
-                router.push("/empresa/dashboard")
+                router.push(`/empresa/${id_empresa}/dashboard`)
             }
         })
     }
 
     return(
         <Container>
-            <Navbar page="clientes"/>
+            <Navbar page="clientes" id_empresa={id_empresa}/>
 
             <SectionStyled>
                 <header>
@@ -158,12 +159,14 @@ export function getServerSideProps(ctx: NextPageContext){
     }
 
     var idCliente = parseInt(ctx.query.id as string);
+    var id_empresa = parseInt(ctx.query.id_empresa as string);
     
     if(!idCliente)idCliente = 0
 
     return {
         props: {
-            idCliente
+            idCliente,
+            id_empresa
         }
     }
 }

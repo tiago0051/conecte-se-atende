@@ -5,10 +5,10 @@ import { useRouter } from "next/router"
 import { Key, useEffect, useState } from "react"
 import axios from "axios"
 
-import Navbar from "../../../components/navbar"
-import { Container, LineStyled, SectionStyled } from "../../../styles/empresa/dashboard"
+import Navbar from "../../../../components/navbar"
+import { Container, LineStyled, SectionStyled } from "../../../../styles/empresa/dashboard"
 import { motion } from "framer-motion"
-import Loading from "../../../components/loading"
+import Loading from "../../../../components/loading"
 
 interface IServiço {
     id: number,
@@ -17,7 +17,7 @@ interface IServiço {
     valor: number
 }
 
-export default function Serviços(){
+export default function Serviços(props : {id_empresa: number}) {
     const router = useRouter()
 
     const [serviços, setServiços] = useState<IServiço[]>([])
@@ -27,9 +27,14 @@ export default function Serviços(){
     useEffect(() => {
         const {token} = parseCookies()
 
-        axios.get("/api/servicos/listar", {headers: {Authorization: `${token}`}}).then(response => {
-            setServiços(response.data)
-            setLoading(false)
+        axios.get("/api/servicos/0", {headers: {Authorization: `${token}`, id_empresa: props.id_empresa + ""}}).then(response => {
+            if(response.data.success){
+                setServiços(response.data.serviços)
+                setLoading(false)
+            }else{
+                alert("Erro ao carregar os serviços")
+                setLoading(false)
+            }
         })
     }, [])
 
@@ -39,12 +44,12 @@ export default function Serviços(){
 
     return(
         <Container>
-            <Navbar page="serviços"/>
+            <Navbar page="serviços" id_empresa={props.id_empresa}/>
             
             <SectionStyled>
                 <header>
                     <h1>Serviços</h1>
-                    <button onClick={() => router.push("/empresa/dashboard/servico/0")}><FiPlus/>Adicionar Serviço</button>
+                    <button onClick={() => router.push(`/empresa/${props.id_empresa}/dashboard/servico/0`)}><FiPlus/>Adicionar Serviço</button>
                 </header>
 
                 <main>
@@ -57,7 +62,7 @@ export default function Serviços(){
                             !loading &&
                             serviçosList.map(serviço => (
                                 <motion.div key={serviço.id as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}}>
-                                    <LineStyled onClick={() => router.push("/empresa/dashboard/servico/" + serviço.id)}>
+                                    <LineStyled onClick={() => router.push(`/empresa/${props.id_empresa}/dashboard/servico/${serviço.id}`)}>
                                         <div>
                                             <h3><b>NOME:</b> {serviço.nome}</h3>
                                             <p><b>DESCRIÇÃO:</b> {serviço.descrição}</p>
@@ -85,6 +90,7 @@ export default function Serviços(){
 
 export async function getServerSideProps(ctx: NextPageContext){
     const {token} = parseCookies(ctx)
+
     if(!token){
         return {
             redirect: {
@@ -94,7 +100,9 @@ export async function getServerSideProps(ctx: NextPageContext){
         }
     }
 
+    var id_empresa = parseInt(ctx.query.id_empresa as string);
+
     return {
-        props: {}
+        props: {id_empresa}
     }
 }

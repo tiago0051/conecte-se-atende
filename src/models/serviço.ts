@@ -13,11 +13,11 @@ const serviço = (id: number, nome: string, descrição: string, valor: number) 
 
 export default serviço
 
-export async function getServiço(id: number){
+export async function getServiço(id: number, id_empresa: number){
     const DB = await db();
 
     return new Promise<IServiço>((resolve, reject) => {
-        DB.query(`SELECT * FROM servicos WHERE id = ${id}`, (err, result) => {
+        DB.query(`SELECT * FROM servicos WHERE id = ${id} AND id_empresa = ${id_empresa}`, (err, result) => {
             if(err) reject(err)
            resolve(serviço(result[0].id, result[0].nome, result[0].descricao, result[0].valor))
         })
@@ -39,11 +39,11 @@ export async function InsertServiço(nome: string, descrição: string, valor: n
     })
 }
 
-export async function UpdateServiço(id: number, nome: string, descrição: string, valor: number){
+export async function UpdateServiço(id: number, nome: string, descrição: string, valor: number, id_empresa: number){
     const DB = await db();
 
     return new Promise<Boolean>((resolve, reject) => {
-        DB.query(`UPDATE servicos SET nome = '${nome}', descricao = '${descrição}', valor = '${valor}' WHERE id = ${id};`, (err, result) => {
+        DB.query(`UPDATE servicos SET nome = '${nome}', descricao = '${descrição}', valor = '${valor}' WHERE id = ${id} AND id_empresa = ${id_empresa};`, (err, result) => {
             if(err) reject(false)
             
             resolve(true)

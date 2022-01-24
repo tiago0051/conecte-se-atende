@@ -1,7 +1,7 @@
 import { NextPageContext } from "next"
 import { parseCookies } from "nookies"
-import Navbar from "../../../components/navbar"
-import { Container } from "../../../styles/empresa/dashboard"
+import Navbar from "../../../../components/navbar"
+import { Container } from "../../../../styles/empresa/dashboard"
 
 export default function Agenda() {
     return (

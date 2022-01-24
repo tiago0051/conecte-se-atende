@@ -1,0 +1,35 @@
+import axios from "axios";
+import { NextApiRequest, NextApiResponse } from "next";
+import {getEmpresaByEmail, InsertEmpresa} from "../../../models/empresa";
+import { InsertUsuário } from "../../../models/usuario";
+
+export default async function Cadastrar(req: NextApiRequest, res: NextApiResponse){
+    const {nomeEmpresa, emailEmpresa, emailUsuário, nomeUsuário} = req.body
+
+    if(!nomeEmpresa || !emailEmpresa || !emailUsuário || !nomeUsuário){
+        return res.status(400).json({
+            error: 'Dados insuficientes'
+        })
+    }
+
+    var empresa = await getEmpresaByEmail(emailEmpresa)
+
+    if(!empresa){
+        await InsertEmpresa(nomeEmpresa, '', '', emailEmpresa, '')
+        
+        empresa = await getEmpresaByEmail(emailEmpresa)
+
+        await InsertUsuário(emailUsuário, nomeUsuário, emailUsuário, empresa!.id, 2)
+
+        axios.post("https://conecte-se-atende.vercel.app/api/auth/verificar_email", {email: emailUsuário}).then((response) => {
+            if(response.status == 200){
+                return res.status(200).json({mensagem: 'Empresa cadastrada com sucesso'})
+            }else{
+                return res.status(500).json({mensagem: 'Erro ao cadastrar empresa'})
+            }
+        })
+
+    }else{
+        res.json({mensagem: "Empresa já cadastrada"})
+    }
+}

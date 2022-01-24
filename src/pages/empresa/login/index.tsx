@@ -9,6 +9,7 @@ import {FiLogIn} from 'react-icons/fi'
 import {MainStyled} from '../../../styles/empresa/login';
 import { AuthContext } from '../../../contexts/AuthContext';
 import Loading from '../../../components/loading';
+import Head from 'next/head';
 
 export default function Login(){
     const {signIn, enviarEmailRecuperação} = useContext(AuthContext)
@@ -38,7 +39,7 @@ export default function Login(){
             setLoading(true)
             signIn(email, senha).then(response => {
                 if(response){
-                    router.push('/empresa/dashboard')
+                    router.push('/empresa')
                 }else{
                     setLoading(false)
                     setError('Usuário ou senha inválidos')
@@ -49,6 +50,9 @@ export default function Login(){
 
     return (
         <MainStyled>
+            <Head>
+                <title>Login - Empresa</title>
+            </Head>
             {
                 !loading && (
                     <form onSubmit={handleSubmitLogar}>

@@ -12,7 +12,7 @@ interface IServiço {
     valor: number,
 }
 
-export default function Servicos({cliente, setClienteCod}: {cliente: {id: number, nome: String}, setClienteCod: () => void}) {
+export default function Servicos({cliente, setClienteCod, id_empresa}: {cliente: {id: number, nome: String}, setClienteCod: () => void, id_empresa: number}) {
     const [adicionar, setAdicionar] = useState(false)
 
     const [serviços, setServiços] = useState<IServiço[]>([])
@@ -30,13 +30,17 @@ export default function Servicos({cliente, setClienteCod}: {cliente: {id: number
 
     useEffect(() => {
         const {token} = parseCookies()
-        axios.get("/api/servicos/listar", {headers: {Authorization: `${token}`}}).then((response: {data: IServiço[]}) => {
-            setServiços(response.data)
+        axios.get("/api/servicos/0", {headers: {Authorization: `${token}`, id_empresa: id_empresa + ""}}).then((response: {data: {serviços: IServiço[], success: boolean}}) => {
+            if(response.data.success){
+                setServiços(response.data.serviços)
+            }
         })
 
-        axios.get("/api/clientes/" + cliente.id + "/servicos_recebidos", {headers: {Authorization: `${token}`}}).then((response) => {
+        axios.get("/api/clientes/" + cliente.id + "/servicos_recebidos", {headers: {Authorization: `${token}`, id_empresa: id_empresa + ""}}).then((response) => {
             if(response.status == 200){
-                setServiçosRecebido(response.data)
+                if(response.data.success){
+                    setServiçosRecebido(response.data.serviços)
+                }
             }
         })
     }, [update])
@@ -57,7 +61,7 @@ export default function Servicos({cliente, setClienteCod}: {cliente: {id: number
             if(valorPago && valorPago > 0){
                 const {token} = parseCookies()
 
-                axios.post("/api/clientes/receber_servico", {serviço: serviçoSelecionado, valor: valorPago, clienteCod: cliente.id, token}).then((response) => {
+                axios.post(`/api/clientes/${cliente.id}/servicos_recebidos`, {id_serviço_recebido: serviçoSelecionado.id, valor: valorPago}, {headers: {authorization: token, id_empresa: id_empresa + ""}}).then((response) => {
                     if(response.status == 200){
                         setAdicionar(false)
                         setValorPago(undefined)
@@ -80,9 +84,8 @@ export default function Servicos({cliente, setClienteCod}: {cliente: {id: number
 
         if(resposta){
             const {token} = parseCookies()
-        
 
-            axios.post("/api/clientes/deletar_servico", {token, id}).then((response) => {
+            axios.delete(`/api/clientes/${cliente.id}/servicos_recebidos`, {data: {id_serviço_prestado: id}, headers: {authorization: token, id_empresa: id_empresa + ""}}).then((response) => {
                 setUpdate(!update)
             })
         }

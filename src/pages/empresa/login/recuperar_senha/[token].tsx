@@ -10,6 +10,7 @@ import {FiLogIn} from 'react-icons/fi'
 import {MainStyled} from '../../../../styles/empresa/login';
 import { AuthContext } from '../../../../contexts/AuthContext';
 import Loading from '../../../../components/loading';
+import Head from 'next/head';
 
 export default function RecuperarSenha({token} : {token: string}) {
     const {trocarSenha} = useContext(AuthContext)
@@ -25,7 +26,8 @@ export default function RecuperarSenha({token} : {token: string}) {
         event.preventDefault();
 
         if(senha == senhaConfirmação){
-            setLoading(true)
+            //setLoading(true)
+            console.log("a")
             trocarSenha(token, senha).then(response => {
                 if(response){
                     router.push('/empresa/login')
@@ -41,6 +43,9 @@ export default function RecuperarSenha({token} : {token: string}) {
 
     return(
         <MainStyled>
+            <Head>
+                <title>Recuperar Senha - Empresa</title>
+            </Head>
             <form onSubmit={handleSubmitLogar}>
                 <Image src='/logo-laranja.svg' alt='Logo' width='150' height='150' />
 
