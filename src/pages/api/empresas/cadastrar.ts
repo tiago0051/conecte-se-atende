@@ -20,7 +20,7 @@ export default async function Cadastrar(req: NextApiRequest, res: NextApiRespons
 
             await InsertUsuário(emailUsuário, nomeUsuário, emailUsuário, empresa!.id, 2)
     
-            axios.post("https://conecte-se-atende.vercel.app/api/auth/verificar_email", {email: emailUsuário}).then((response) => {
+            axios.post(`https://${process.env.VERCEL_URL}/api/auth/verificar_email`, {email: emailUsuário}).then((response) => {
                 if(response.status == 200){
                     return res.status(200).json({mensagem: 'Empresa cadastrada com sucesso'})
                 }else{
