@@ -65,7 +65,7 @@ export async function getUsuárioByEmail(email: string){
     const DB = await db();
 
     return new Promise<IUsuário>((resolve, reject) => {
-        DB.query(`SELECT * FROM usuarios WHERE email = '${email};`, (err, result) => {
+        DB.query(`SELECT * FROM usuarios WHERE email = '${email}';`, (err, result) => {
             if(err) reject(err)
            resolve(usuário(result[0].id, result[0].user, result[0].nome, result[0].email))
         })

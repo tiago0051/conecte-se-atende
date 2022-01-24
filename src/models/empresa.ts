@@ -44,12 +44,11 @@ export async function InsertEmpresa(nome: string, razao_social: string, cnpj: st
     const DB = await db();
 
     return new Promise<Boolean>((resolve, reject) => {
-        const sqlQuery = `INSERT INTO empresas (nome, razao_social, cnpj, email, tel) VALUES ('${nome}', '${razao_social}', '${cnpj}', '${email}', '${tel}')`;
+        const sqlQuery = `INSERT INTO empresas (nome, razao_social, cnpj, email, tel, id_plano) VALUES ('${nome}', '${razao_social}', '${cnpj}', '${email}', '${tel}', 1)`;
         DB.query(sqlQuery, (err, result) => {
-            if(err){
-                resolve(false)
-                throw err
-            }
+            if(err) return reject(err)
+
+            if(!result.affectedRows) return reject(new Error("Não foi possível inserir a empresa"))
            resolve(true)
         })
     })

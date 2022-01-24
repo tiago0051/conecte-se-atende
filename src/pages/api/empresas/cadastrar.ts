@@ -15,18 +15,20 @@ export default async function Cadastrar(req: NextApiRequest, res: NextApiRespons
     var empresa = await getEmpresaByEmail(emailEmpresa)
 
     if(!empresa){
-        await InsertEmpresa(nomeEmpresa, '', '', emailEmpresa, '')
-        
-        empresa = await getEmpresaByEmail(emailEmpresa)
+        InsertEmpresa(nomeEmpresa, '', '', emailEmpresa, '').then(async () => {
+            empresa = await getEmpresaByEmail(emailEmpresa)
 
-        await InsertUsuário(emailUsuário, nomeUsuário, emailUsuário, empresa!.id, 2)
-
-        axios.post("https://conecte-se-atende.vercel.app/api/auth/verificar_email", {email: emailUsuário}).then((response) => {
-            if(response.status == 200){
-                return res.status(200).json({mensagem: 'Empresa cadastrada com sucesso'})
-            }else{
-                return res.status(500).json({mensagem: 'Erro ao cadastrar empresa'})
-            }
+            await InsertUsuário(emailUsuário, nomeUsuário, emailUsuário, empresa!.id, 2)
+    
+            axios.post("https://conecte-se-atende.vercel.app/api/auth/verificar_email", {email: emailUsuário}).then((response) => {
+                if(response.status == 200){
+                    return res.status(200).json({mensagem: 'Empresa cadastrada com sucesso'})
+                }else{
+                    return res.status(500).json({mensagem: 'Erro ao cadastrar empresa'})
+                }
+            })
+        }).catch(error => {
+            return res.status(400).json({success: false, mensagem: "Erro ao inserir empresa: " + error.message, error})
         })
 
     }else{
