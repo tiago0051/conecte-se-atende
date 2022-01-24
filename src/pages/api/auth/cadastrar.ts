@@ -9,7 +9,7 @@ export default async function CadastrarSenha(req: NextApiRequest, res: NextApiRe
         try {
             const decoded = jwt.verify(token!, process.env.JWT_SECRET_EMAIL!) as {data: string};
     
-            const usuário = await getUsuárioByEmail(decoded.data)
+            const usuário = await getUsuárioByEmail(decoded.data, )
     
             const verify = await CadastrarSenhaUsuário(usuário.email, senha)
 
