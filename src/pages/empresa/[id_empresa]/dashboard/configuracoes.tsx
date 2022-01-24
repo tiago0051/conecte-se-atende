@@ -2,9 +2,9 @@ import axios from "axios";
 import { NextPageContext } from "next";
 import { parseCookies } from "nookies";
 import { useContext, useEffect, useState } from "react";
-import Navbar from "../../../components/navbar";
-import { AuthContext } from "../../../contexts/AuthContext";
-import { Container, SectionStyled, ConfiguraçõesStyled } from "../../../styles/empresa/dashboard";
+import Navbar from "../../../../components/navbar";
+import { AuthContext } from "../../../../contexts/AuthContext";
+import { Container, SectionStyled, ConfiguraçõesStyled } from "../../../../styles/empresa/dashboard";
 
 interface IEmpresa {
     id: number,
@@ -15,7 +15,7 @@ interface IEmpresa {
     tel: string
 }
 
-export default function Configurações(){
+export default function Configurações(props: { id_empresa: number }) {
     const {user, enviarEmailRecuperação} = useContext(AuthContext)
 
     const [message, setMessage] = useState("")
@@ -89,7 +89,7 @@ export default function Configurações(){
 
     return(
         <Container>
-            <Navbar page="configurações"/>
+            <Navbar page="configurações" id_empresa={props.id_empresa}/>
 
             <SectionStyled>
                 <header>
@@ -154,7 +154,9 @@ export async function getServerSideProps(ctx: NextPageContext){
         }
     }
 
+    var id_empresa = parseInt(ctx.query.id_empresa as string);
+
     return {
-        props: {}
+        props: {id_empresa}
     }
 }
