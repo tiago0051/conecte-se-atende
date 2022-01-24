@@ -26,8 +26,8 @@ export default function RecuperarSenha({token} : {token: string}) {
         event.preventDefault();
 
         if(senha == senhaConfirmação){
-            //setLoading(true)
-            console.log("a")
+            setLoading(true)
+            
             trocarSenha(token, senha).then(response => {
                 if(response){
                     router.push('/empresa/login')

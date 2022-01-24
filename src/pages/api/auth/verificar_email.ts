@@ -7,7 +7,7 @@ export default async function VerificarEmail(req: NextApiRequest, res: NextApiRe
 
     const tokenEmail = jwt.sign({
         data: email
-      }, process.env.JWT_SECRET_EMAIL!, { expiresIn: 60 * 10 })
+      }, process.env.JWT_SECRET_EMAIL!, { expiresIn: 60 * 15 })
 
     const info = await EnviarEmailVerificação(email as string, tokenEmail);
 
