@@ -3,10 +3,10 @@ import { parseCookies } from "nookies"
 import Navbar from "../../../../components/navbar"
 import { Container } from "../../../../styles/empresa/dashboard"
 
-export default function Agenda() {
+export default function Agenda(props: {id_empresa: number}) {
     return (
         <Container>
-            <Navbar page="agenda"/>
+            <Navbar page="agenda" id_empresa={props.id_empresa}/>
 
             <section>
                 Agenda
@@ -26,7 +26,9 @@ export async function getServerSideProps(ctx: NextPageContext){
         }
     }
 
+    var id_empresa = parseInt(ctx.query.id_empresa as string);
+
     return {
-        props: {}
+        props: {id_empresa}
     }
 }
