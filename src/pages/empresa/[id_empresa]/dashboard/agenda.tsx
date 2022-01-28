@@ -1,16 +1,18 @@
 import { NextPageContext } from "next"
 import { parseCookies } from "nookies"
 import Navbar from "../../../../components/navbar"
-import { Container } from "../../../../styles/empresa/dashboard"
+import { Container, SectionStyled } from "../../../../styles/empresa/dashboard"
 
 export default function Agenda(props: {id_empresa: number}) {
     return (
         <Container>
             <Navbar page="agenda" id_empresa={props.id_empresa}/>
 
-            <section>
-                Agenda
-            </section>
+            <SectionStyled>
+                <header>
+                    <h1>Agenda</h1>
+                </header>
+            </SectionStyled>
         </Container>
     )
 }

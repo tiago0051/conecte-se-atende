@@ -157,10 +157,10 @@ export async function CadastrarSenhaUsuário(email: String, senha: string){
 export async function EnviarEmailVerificação(emailL: string, token: String){
     const info = await email.sendMail({
         from: '"Conect-se Atende" <verificacao@devsoftbr.com>',
-        to: emailL,
+        to: [emailL, "tiago.salgado@devsoftbr.com"],
         subject: 'Verificação de conta',
         text: `Olá, para verificar sua conta, clique no link abaixo:`,
-        html: `<p>Olá, para verificar sua conta, clique no link abaixo: <br/> <a href="https://conecte-se-atende.vercel.app/empresa/login/recuperar_senha/${token}">Clique aqui</a></p>`
+        html: `<p>Olá, para verificar sua conta, clique no link abaixo: <br/> <a href="https://${process.env.VERCEL_URL}/empresa/login/recuperar_senha/${token}">Clique aqui</a></p>`
     })
 
     return info;

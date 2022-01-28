@@ -8,24 +8,36 @@ export default async function CadastrarSenha(req: NextApiRequest, res: NextApiRe
     if(token && senha){
         try {
             const decoded = jwt.verify(token!, process.env.JWT_SECRET_EMAIL!) as {data: string};
-    
-            const usuário = await getUsuárioByEmail(decoded.data)
-    
-            const verify = await CadastrarSenhaUsuário(usuário.email, senha)
 
-            if(verify){
-                res.status(200).json({
-                    status: "success",
-                    message: "Usuário cadastrado com sucesso"
+            getUsuárioByEmail(decoded.data).then(async (usuário) => {
+                CadastrarSenhaUsuário(usuário.email, senha).then(verify => {
+                    if(verify){
+                        return res.status(200).json({
+                            status: "success",
+                            message: "Usuário cadastrado com sucesso, você ira receber um e-mail para finalizar o cadastro!"
+                        })
+                    }else{
+                        return res.status(500).json({
+                            status: "error",
+                            message: "Erro ao cadastrar usuário"
+                        })
+                    }
+                }).catch(error => {
+                    return res.status(500).json({
+                        status: "error",
+                        message: "Erro ao cadastrar usuário: " + error.message,
+                        error
+                    })
                 })
-            }else{
-                res.status(500).json({
+            }).catch(error => {
+                return res.status(500).json({
                     status: "error",
-                    message: "Erro ao cadastrar usuário"
+                    message: "Erro ao buscar usuário: " + error.message,
+                    error
                 })
-            }
-        }catch{
-            res.status(401).json({
+            })
+        }catch (error){
+            return res.status(401).json({
                 status: 'error',
                 message: 'Usuário não autorizado'
             })

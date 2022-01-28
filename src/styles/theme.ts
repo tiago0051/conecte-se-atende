@@ -2,7 +2,7 @@ export const lightTheme = {
     colors: {
         primary: '#002D70',
         secondary: '#F37020',
-        background: 'rgb(230, 255, 255)',
+        background: 'white',
         background2: 'white',
         border: '#707070',
         text: 'rgb(30, 30, 30)',

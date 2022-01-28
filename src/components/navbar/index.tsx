@@ -17,9 +17,9 @@ export default function Navbar(Props: INavBarProps) {
             </div>
 
             <ul>
-                <NavBarLink selected={Props.page == "clientes"}><FaUser/><Link href={"/empresa/"+ Props.id_empresa +"/dashboard"}>Clientes</Link></NavBarLink>
-                <NavBarLink selected={Props.page == "serviços"}><FaHandshake/><Link href={"/empresa/"+ Props.id_empresa +"/dashboard/servicos"}>Serviços</Link></NavBarLink>
-                <NavBarLink selected={Props.page == "agenda"}><FaCalendarWeek/><Link href={"/empresa/"+ Props.id_empresa +"/dashboard/agenda"}>Agenda</Link></NavBarLink>
+                <Link href={"/empresa/"+ Props.id_empresa +"/dashboard"} passHref><NavBarLink selected={Props.page == "clientes"}><FaUser/>Clientes</NavBarLink></Link>
+                <Link href={"/empresa/"+ Props.id_empresa +"/dashboard/servicos"} passHref><NavBarLink selected={Props.page == "serviços"}><FaHandshake/>Serviços</NavBarLink></Link>
+                <Link href={"/empresa/"+ Props.id_empresa +"/dashboard/agenda"} passHref><NavBarLink selected={Props.page == "agenda"}><FaCalendarWeek/>Agenda</NavBarLink></Link>
             </ul>
             
             <ul>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Main = styled.main`
-    background-image: url("/imagens/index/fundo_formulario.jpg");
+    background-image: url("/imagens/index/fundo_formulario.webp");
     height: 100vh;
     width: 100vw;
     background-repeat: no-repeat;
@@ -10,7 +10,7 @@ export const Main = styled.main`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
 
     form {
         background-color: white;
