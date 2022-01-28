@@ -57,6 +57,7 @@ export const NavStyled = styled.nav`
         align-items: center;
         list-style: none;
         color: ${props => props.theme.colors.background};
+        overflow: hidden;
     }
 
     li {
@@ -66,6 +67,7 @@ export const NavStyled = styled.nav`
         flex-direction: row;
         align-items: center;
         transition: filter .2s linear;
+        cursor: pointer;
 
         svg {
             margin-right: 0.5rem;
