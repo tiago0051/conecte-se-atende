@@ -1,10 +1,14 @@
 import axios from "axios"
+import Head from "next/head"
 import Image from "next/image"
 import { FormEvent, useState } from "react"
+import { useRouter } from "next/router"
 import Loading from "../components/loading"
 import { Main } from "../styles"
 
 export default function Home() {
+  const router = useRouter()
+
   const [nomeEmpresa, setNomeEmpresa] = useState('')
   const [emailEmpresa, setEmailEmpresa] = useState('')
   const [emailUsuário, setEmailUsuário] = useState('')
@@ -29,6 +33,15 @@ export default function Home() {
 
   return (
     <Main>
+      <Head>
+        <title>Conect-se Atende - Cadastre sua Empresa</title>
+        <meta name="description" content="Aplicação de gerenciamento de clientes, serviços e agenda" />
+      </Head>
+
+      <div>
+        <button onClick={() => router.push("/empresa")}>Dashboard da Empresa</button>
+      </div>
+
       {
         !loading && (
           <form onSubmit={handleSubmit}>

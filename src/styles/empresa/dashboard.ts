@@ -79,13 +79,6 @@ export const NavStyled = styled.nav`
         }
     }
 
-    a {
-        color: ${props => props.theme.colors.background};
-        border-bottom: 2px solid ${props => props.theme.colors.secondary};
-        text-decoration: none;
-        transition: border 0.2s linear;
-    }
-
     @media (max-width: 768px) {
         padding: 0;
         margin: 0;
@@ -109,8 +102,17 @@ export const NavStyled = styled.nav`
                 height: 100%;
                 margin: 0;
                 font-size: 1.5rem;
+
+                svg {
+                    font-size: 2rem;
+                }
+            }
+
+            :last-child{
+                display: none;
             }
         }
+
     }
 `
 

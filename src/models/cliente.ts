@@ -55,7 +55,7 @@ export async function UpdateCliente(id: number, nome: string, cpf: string, email
     const DB = await db();
 
     return new Promise((resolve, reject) => {
-        DB.query(`UPDATE clientes SET cpf = '${cpf}', whatsapp = '${whatsapp}', tel = '${telefone}', endereco = '${endereço}', aniversario = '${aniversario}', obs = '${obs}' WHERE id = '${id}' AND id_empresa = '${id_empresa}';`, (err, result) => {
+        DB.query(`UPDATE clientes SET cpf = '${cpf}', whatsapp = '${whatsapp}', tel = '${telefone}', endereco = '${endereço}', ${aniversario ? `aniversario = '${aniversario}',` : ""} obs = '${obs}' WHERE id = '${id}' AND id_empresa = '${id_empresa}';`, (err, result) => {
             if(err) return reject(err)
 
             if(result.affectedRows == 0)

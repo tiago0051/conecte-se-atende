@@ -11,6 +11,21 @@ export const Main = styled.main`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
+
+    > div {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    }
 
     form {
         background-color: white;

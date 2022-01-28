@@ -1,5 +1,5 @@
 import { ServiçosPrestadosStyled } from "../../styles/empresa/dashboard"
-import { FiPlus, FiX } from "react-icons/fi"
+import { FiMinus, FiPlus, FiX } from "react-icons/fi"
 import { AnimatePresence, motion } from "framer-motion"
 import { Key, useEffect, useState } from "react"
 import axios from "axios"
@@ -98,7 +98,7 @@ export default function Servicos({cliente, setClienteCod, id_empresa}: {cliente:
                     <motion.div animate={{rotateX: 0}} initial={{rotateX: 90}} transition={{ease: "easeInOut", duration: 0.4}} exit={{rotateX: 90}} key="moda2l">
                         <FiX onClick={() => setClienteCod()}>Teste</FiX>
 
-                        <h1>{cliente.nome}<button onClick={() => setAdicionar(a => !a)}><FiPlus/></button></h1>
+                        <h1>{cliente.nome}<button onClick={() => setAdicionar(a => !a)}>{adicionar ? (<FiMinus/>) : (<FiPlus/>)}</button></h1>
 
                         <AnimatePresence>
                             {

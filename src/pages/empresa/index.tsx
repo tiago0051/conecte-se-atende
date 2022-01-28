@@ -1,5 +1,6 @@
 import axios from "axios"
 import { NextPageContext } from "next"
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { parseCookies } from "nookies"
 import { useContext, useEffect } from "react"
@@ -40,10 +41,14 @@ export default function EscolherEmpresa(){
                 }
             })
         }
-    }, [])
+    })
 
     return(
-        <>teste</>
+        <main>
+            <Head>
+                <title>Conect-se Atende - Escolha sua Empresa</title>
+            </Head>
+        </main>
     )
 }
 

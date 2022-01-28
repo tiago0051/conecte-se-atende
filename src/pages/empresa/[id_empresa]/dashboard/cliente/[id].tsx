@@ -124,7 +124,7 @@ export default function Editar({idCliente, id_empresa} : IProps){
                         </label>
 
                         <label>Telefone
-                            <input type="tel" pattern="[0-9]{11}" defaultValue={telefone} onChange={event => setTelefone(event.target.value)}/>
+                            <input type="tel" defaultValue={telefone} onChange={event => setTelefone(event.target.value)}/>
                         </label>
 
                         <label>Endereço
