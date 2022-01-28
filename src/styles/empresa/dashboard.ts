@@ -51,6 +51,7 @@ export const NavStyled = styled.nav`
     }
 
     ul {
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -64,10 +65,15 @@ export const NavStyled = styled.nav`
         display: flex;
         flex-direction: row;
         align-items: center;
+        transition: filter .2s linear;
 
         svg {
             margin-right: 0.5rem;
             font-size: 2rem;
+        }
+
+        :hover {
+            filter: brightness(1.5);
         }
     }
 
@@ -76,10 +82,6 @@ export const NavStyled = styled.nav`
         border-bottom: 2px solid ${props => props.theme.colors.secondary};
         text-decoration: none;
         transition: border 0.2s linear;
-
-        :hover {
-            border-bottom: 2px solid ${props => props.theme.colors.background};
-        }
     }
 
     @media (max-width: 768px) {
@@ -96,15 +98,15 @@ export const NavStyled = styled.nav`
             justify-content: space-between;
             width: 100%;
             margin: 0;
-            padding: 0 1rem;
+            padding: 0;
+            height: 300px;
 
             li {
                 display: flex;
                 flex-direction: column;
-
-                a {
-                    font-size: 1.5rem;
-                }
+                height: 100%;
+                margin: 0;
+                font-size: 1.5rem;
             }
         }
     }
@@ -115,9 +117,16 @@ interface IPropsLink {
 }
 
 export const NavBarLink = styled.li<IPropsLink>`
-    a {
-        border-bottom: 2px solid ${props => props.selected ? props.theme.colors.background : props.theme.colors.secondary};
-    }
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: ${props => props.theme.colors.secondary};
+    filter: ${props => props.selected ? "brightness(1.5)" : "none"};
+    padding: 10px;
+
+    width: 100%;
 `
 
 export const SectionStyled = styled.section`
