@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
-import { getEmpresa, UpdateEmpresa } from "../../../models/empresa";
-import { getUsuárioEmpresa } from "../../../models/usuario";
+import { getEmpresa, UpdateEmpresa } from "../../../../models/empresa";
+import { getUsuárioEmpresa } from "../../../../models/usuario";
 
 export default async function getEmpresaAPI(req: NextApiRequest, res: NextApiResponse){
     const {authorization, id_empresa} = req.headers;

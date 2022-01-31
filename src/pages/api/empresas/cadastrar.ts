@@ -18,7 +18,7 @@ export default async function Cadastrar(req: NextApiRequest, res: NextApiRespons
         InsertEmpresa(nomeEmpresa, '', '', emailEmpresa, '').then(async () => {
             empresa = await getEmpresaByEmail(emailEmpresa)
 
-            await InsertUsuário(emailUsuário, nomeUsuário, emailUsuário, empresa!.id, 2)
+            await InsertUsuário(emailUsuário, nomeUsuário, emailUsuário, empresa!.id, 3)
     
             axios.post(`https://${process.env.VERCEL_URL}/api/auth/verificar_email`, {email: emailUsuário}).then((response) => {
                 if(response.status == 200){

@@ -7,6 +7,7 @@ import GlobalStyled from '../styles/global'
 import { AuthProvider } from '../contexts/AuthContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
+
   return (
     <AuthProvider>
       <ThemeProvider theme={lightTheme}>

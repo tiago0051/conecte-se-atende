@@ -79,6 +79,11 @@ export const NavStyled = styled.nav`
         }
     }
 
+    a {
+        color: ${props => props.theme.colors.background};
+        text-decoration: none;
+    }
+
     @media (max-width: 768px) {
         padding: 0;
         margin: 0;
@@ -292,29 +297,38 @@ export const LineStyled = styled.li`
 
 export const ConfiguraçõesStyled = styled.main`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     width: 100%;
     height: 100vh;
 
-    > p {
+    > div {
+        display: flex;
+        flex-direction: column;
+        width: calc(50% - 2rem);
+        margin: 0 1rem;
+        height: 100vh;
+
+        > p {
         color: ${props => props.theme.colors.text};
         margin: 1rem 0;
-    }
+        }
 
-    > a {
-        margin-bottom: 1rem;
-        
+        > a {
+            margin-bottom: 1rem;
+            
+        }
     }
 
     input {
         border-radius: 5px;
-        width: 800px;
+        width: 100%;
     }
 
     textarea {
         font-size: 1rem;
         height: 10rem;
-        width: 800px;
+        width: 100%;
     }
 
     label {
@@ -507,4 +521,8 @@ export const ServiçosPrestadosStyled = styled.main`
             }
         }
     }
+`
+
+export const PlanoConfigurações = styled.div`
+
 `

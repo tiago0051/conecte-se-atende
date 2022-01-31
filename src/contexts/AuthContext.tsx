@@ -41,7 +41,9 @@ export const AuthProvider:FC = ({ children }) => {
         const {token} = parseCookies()
         
         if(token){
-            axios.post('/api/auth/check', {token}).then(response => {
+            const empresa = router.query.id_empresa as string
+            const id_empresa = parseInt(empresa)
+            axios.post('/api/auth/check', {token, id_empresa}).then(response => {
                 if(response.data.logado){
                     setUser(response.data.usuário)
                 }else{
