@@ -40,12 +40,7 @@ export default class MyDocument extends Document {
           <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;700&display=swap" rel="stylesheet" />
           <link rel="icon" type="image/svg+xml" href="/logo-laranja.svg"></link>
 
-          <Script
-            strategy="afterInteractive"
-            src={`https://www.googletagmanager.com/gtag/js?id=G-1TZ59ZMCXH`}
-          />
-          <Script
-            strategy="afterInteractive"
+          <script
             dangerouslySetInnerHTML={{
               __html: `
                   window.dataLayer = window.dataLayer || [];
