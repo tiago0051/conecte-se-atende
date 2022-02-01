@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 import { getCliente, getClienteUsuários, InsertCliente, UpdateCliente } from "../../../../models/cliente";
 import { getUsuário, getUsuárioEmpresa } from "../../../../models/usuario";
+import { getPlanoByEmpresa } from "../../../../models/plano";
 
 interface IBodyPuty {
     nome: string,
@@ -74,10 +75,18 @@ export default async function List(req: NextApiRequest, res: NextApiResponse){
                                 return res.status(500).json({success: false, mensagem: "Erro ao atualizar cliente: " + error.message, error});
                             })
                         }else{
-                            InsertCliente(nome, email, cpf ? cpf : " ", whatsapp, telefone ? whatsapp : " ", usuárioEmpresa.id_empresa, endereço ? endereço : " ", aniversario ? aniversario : "", obs ? obs : " ").then(() => {
-                                return res.status(200).json({success: true, mensagem: "Cliente cadastrado com sucesso"});
+                            getPlanoByEmpresa(usuárioEmpresa.id_empresa).then(async plano => {
+                                if(plano.limite_clientes > plano.total_clientes){
+                                    InsertCliente(nome, email, cpf ? cpf : " ", whatsapp, telefone ? whatsapp : " ", usuárioEmpresa.id_empresa, endereço ? endereço : " ", aniversario ? aniversario : "", obs ? obs : " ").then(() => {
+                                        return res.status(200).json({success: true, mensagem: "Cliente cadastrado com sucesso"});
+                                    }).catch(error => {
+                                        return res.status(500).json({success: false, mensagem: "Erro ao cadastrar cliente: " + error.message, error});
+                                    })
+                                }else{
+                                    return res.status(400).json({success: false, mensagem: "Limite de clientes excedido"});
+                                }
                             }).catch(error => {
-                                return res.status(500).json({success: false, mensagem: "Erro ao cadastrar cliente: " + error.message, error});
+                                return res.status(500).json({success: false, mensagem: "Erro ao buscar plano: " + error.message, error});
                             })
                         }
                     }else{

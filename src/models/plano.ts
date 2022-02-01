@@ -28,7 +28,7 @@ export default empresa
 export async function getPlanoByEmpresa(id_empresa: number){
     const DB = await db();
 
-    return new Promise<IEmpresa | null>((resolve, reject) => {
+    return new Promise<IEmpresa>((resolve, reject) => {
             DB.query(`SELECT * FROM empresas INNER JOIN planos ON planos.id = id_plano WHERE empresas.id = '${id_empresa}'`, (err, result) => {
             if(err) reject(err)
 
