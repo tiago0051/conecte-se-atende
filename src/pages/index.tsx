@@ -68,7 +68,7 @@ export default function Home() {
               <input type="email" onChange={event => setEmailUsuário(event.target.value)} required/>
             </label>
     
-            <input type="submit" value="Cadastrar"/>
+            <input type="submit" value="Cadastrar" id="cadastrar"/>
           </form>
         )
       }
