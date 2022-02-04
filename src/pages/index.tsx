@@ -27,7 +27,11 @@ export default function Home() {
     setLoading(true)
     axios.post("/api/empresas/cadastrar", {nomeEmpresa, emailEmpresa, emailUsuário, nomeUsuário}).then((response) => {
       setLoading(false)
-      alert(response.data.mensagem)
+      if(response.data.success){
+        alert(response.data.mensagem)
+      }else{
+        alert(response.data.mensagem)
+      }
     })
   }
 

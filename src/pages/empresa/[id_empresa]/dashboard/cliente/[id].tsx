@@ -86,11 +86,11 @@ export default function Editar({idCliente, id_empresa} : IProps){
         }
 
         axios.put(`/api/clientes/${idCliente}`, cliente, {headers: {authorization: token, id_empresa: id_empresa + ""}}).then((response) => {
-            if(response.status == 500){
-                alert("Erro ao salvar")
-                setLoading(false)
-            }else{
+            if(response.data.success){
                 router.push(`/empresa/${id_empresa}/dashboard`)
+            }else{
+                alert(response.data.mensagem)
+                setLoading(false)
             }
         })
     }

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import {getEmpresaByEmail, InsertEmpresa} from "../../../models/empresa";
-import { InsertUsuário } from "../../../models/usuario";
+import { getUsuárioByEmail, InsertUsuário } from "../../../models/usuario";
 
 export default async function Cadastrar(req: NextApiRequest, res: NextApiResponse){
     const {nomeEmpresa, emailEmpresa, emailUsuário, nomeUsuário} = req.body
@@ -14,7 +14,9 @@ export default async function Cadastrar(req: NextApiRequest, res: NextApiRespons
 
     var empresa = await getEmpresaByEmail(emailEmpresa)
 
-    if(!empresa){
+    var usuário = await getUsuárioByEmail(emailUsuário)
+
+    if(!empresa && !usuário){
         InsertEmpresa(nomeEmpresa, '', '', emailEmpresa, '').then(async () => {
             empresa = await getEmpresaByEmail(emailEmpresa)
 
@@ -22,9 +24,9 @@ export default async function Cadastrar(req: NextApiRequest, res: NextApiRespons
     
             axios.post(`https://${process.env.VERCEL_URL}/api/auth/verificar_email`, {email: emailUsuário}).then((response) => {
                 if(response.status == 200){
-                    return res.status(200).json({mensagem: 'Empresa cadastrada com sucesso'})
+                    return res.status(200).json({success: true, mensagem: 'Empresa cadastrada com sucesso'})
                 }else{
-                    return res.status(500).json({mensagem: 'Erro ao cadastrar empresa'})
+                    return res.status(500).json({success: true, mensagem: 'Erro ao cadastrar empresa'})
                 }
             })
         }).catch(error => {
@@ -32,6 +34,6 @@ export default async function Cadastrar(req: NextApiRequest, res: NextApiRespons
         })
 
     }else{
-        res.json({mensagem: "Empresa já cadastrada"})
+        res.json({success: false, mensagem: "Empresa ou usuário já cadastrada"})
     }
 }

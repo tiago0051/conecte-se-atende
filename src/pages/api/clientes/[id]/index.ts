@@ -80,7 +80,11 @@ export default async function List(req: NextApiRequest, res: NextApiResponse){
                                     InsertCliente(nome, email, cpf ? cpf : " ", whatsapp, telefone ? whatsapp : " ", usuárioEmpresa.id_empresa, endereço ? endereço : " ", aniversario ? aniversario : "", obs ? obs : " ").then(() => {
                                         return res.status(200).json({success: true, mensagem: "Cliente cadastrado com sucesso"});
                                     }).catch(error => {
-                                        return res.status(500).json({success: false, mensagem: "Erro ao cadastrar cliente: " + error.message, error});
+                                        if(error.message && error.message === "Usuário ja possui acesso a empresa"){
+                                            return res.status(200).json({success: false, mensagem: "Usuário ja cadastrado"});
+                                        }else{
+                                            return res.status(500).json({success: false, mensagem: "Erro ao cadastrar cliente: " + error.message, error});
+                                        }
                                     })
                                 }else{
                                     return res.status(400).json({success: false, mensagem: "Limite de clientes excedido"});

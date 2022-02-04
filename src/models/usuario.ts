@@ -67,7 +67,12 @@ export async function getUsuárioByEmail(email: string){
     return new Promise<IUsuário>((resolve, reject) => {
         DB.query(`SELECT * FROM usuarios WHERE email = '${email}';`, (err, result) => {
             if(err) reject(err)
-           resolve(usuário(result[0].id, result[0].user, result[0].nome, result[0].email))
+
+            if(result.length > 0){
+                resolve(usuário(result[0].id, result[0].user, result[0].nome, result[0].email))
+            }else{
+                reject(new Error('Usuário não encontrado'))
+            }
         })
     })
 }
@@ -94,25 +99,43 @@ export async function loginUsuário(usuárioL: String, senha: string){
     })
 }
 
-export async function InsertUsuário(user: String, nome: String, email: String, id_empresa: number, id_permissao: number){
+export async function InsertUsuário(user: String, nome: String, email: string, id_empresa: number, id_permissao: number){
     const DB = await db();
 
     var sql = `INSERT INTO usuarios (user, nome, email, id_tipo_acesso) VALUES ('${user}', '${nome}', '${email}', 1)`;
 
     return new Promise<IUsuário | null>((resolve, reject) => {
-        DB.query(sql, (err, result) => {
-            if(err)resolve(null)
+        getUsuárioByEmail(email).then(async (usuárioL) => {
+            listarEmpresas(usuárioL.id).then(async (empresas) => {
+                const contains_empresa = empresas.some(empresa => empresa.id === id_empresa)
 
-            const id_usuário = result.insertId
-
-            if(result.insertId){
-                DB.query(`INSERT INTO empresa_possui_usuario (id_empresa, id_usuario, id_permissao) VALUES ('${id_empresa}', ${result.insertId}, '${id_permissao}')`, (err, result) => {
-                    if(err)reject(err)
-                    
-                    resolve(usuário(id_usuário, result.user, result.nome, result.email))
+                if(!contains_empresa){
+                    DB.query(`INSERT INTO empresa_possui_usuario (id_empresa, id_usuario, id_permissao) VALUES ('${id_empresa}', ${usuárioL.id}, '${id_permissao}')`, (err, result) => {
+                        if(err)reject(err)
+                        
+                        resolve(usuário(usuárioL.id, user, nome, email))
+                    })
+                }else{
+                    reject(new Error("Usuário ja possui acesso a empresa"))
+                }
+            }).catch(error => reject(error))
+        }).catch(error => {
+            if(error.message && error.message == "Usuário não encontrado"){
+                DB.query(sql, (err, result) => {
+                    if(err)resolve(null)
+        
+                    const id_usuário = result.insertId
+        
+                    if(result.insertId){
+                        DB.query(`INSERT INTO empresa_possui_usuario (id_empresa, id_usuario, id_permissao) VALUES ('${id_empresa}', ${result.insertId}, '${id_permissao}')`, (err, result) => {
+                            if(err)reject(err)
+                            
+                            resolve(usuário(id_usuário, result.user, result.nome, result.email))
+                        })
+                    }else{
+                        resolve(null)
+                    }
                 })
-            }else{
-                resolve(null)
             }
         })
     })
