@@ -1,4 +1,5 @@
 import { NextPageContext } from "next"
+import Head from "next/head"
 import { parseCookies } from "nookies"
 import Navbar from "../../../../components/navbar"
 import { Container, SectionStyled } from "../../../../styles/empresa/dashboard"
@@ -6,6 +7,9 @@ import { Container, SectionStyled } from "../../../../styles/empresa/dashboard"
 export default function Agenda(props: {id_empresa: number}) {
     return (
         <Container>
+            <Head>
+                <title>Conect-se Atende - Agenda</title>
+            </Head>
             <Navbar page="agenda" id_empresa={props.id_empresa}/>
 
             <SectionStyled>

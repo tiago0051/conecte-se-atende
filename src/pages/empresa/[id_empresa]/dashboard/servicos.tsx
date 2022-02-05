@@ -9,6 +9,7 @@ import Navbar from "../../../../components/navbar"
 import { Container, LineStyled, SectionStyled } from "../../../../styles/empresa/dashboard"
 import { motion } from "framer-motion"
 import Loading from "../../../../components/loading"
+import Head from "next/head"
 
 interface IServiço {
     id: number,
@@ -44,6 +45,9 @@ export default function Serviços(props : {id_empresa: number}) {
 
     return(
         <Container>
+            <Head>
+                <title>Conect-se Atende - Serviços</title>
+            </Head>
             <Navbar page="serviços" id_empresa={props.id_empresa}/>
             
             <SectionStyled>

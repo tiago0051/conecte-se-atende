@@ -1,5 +1,6 @@
 import axios from "axios";
 import { NextPageContext } from "next";
+import Head from "next/head";
 import { parseCookies } from "nookies";
 import { useContext, useEffect, useState } from "react";
 import Navbar from "../../../../components/navbar";
@@ -109,6 +110,10 @@ export default function Configurações(props: { id_empresa: number }) {
 
     return(
         <Container>
+            <Head>
+                <title>Conect-se Atende - Configurações</title>
+            </Head>
+
             <Navbar page="configurações" id_empresa={props.id_empresa}/>
 
             <SectionStyled>

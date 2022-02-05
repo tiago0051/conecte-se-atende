@@ -50,7 +50,7 @@ export default function Dashboard(props : {id_empresa: number}){
     return (
         <Container>
             <Head>
-                <title>Dashboard</title>
+                <title>Conect-se Atende - Clientes</title>
             </Head>
             <Navbar page="clientes" id_empresa={props.id_empresa}/>
 
