@@ -4,17 +4,17 @@ import { parseCookies } from "nookies"
 import Navbar from "../../../../components/navbar"
 import { Container, SectionStyled } from "../../../../styles/empresa/dashboard"
 
-export default function Agenda(props: {id_empresa: number}) {
+export default function Relatórios(props: {id_empresa: number}) {
     return (
         <Container>
             <Head>
-                <title>Conect-se Atende - Agenda</title>
+                <title>Conect-se Atende - Relatórios</title>
             </Head>
-            <Navbar page="agenda" id_empresa={props.id_empresa}/>
+            <Navbar page="relatorios" id_empresa={props.id_empresa}/>
 
             <SectionStyled>
                 <header>
-                    <h1>Agenda</h1>
+                    <h1>Relatórios</h1>
                 </header>
             </SectionStyled>
         </Container>

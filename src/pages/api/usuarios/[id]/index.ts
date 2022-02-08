@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
-import { getUsuárioEmpresa, UpdateUsuário } from "../../../../models/usuario";
+import { getUsuárioEmpresa, getUsuáriosEmpresaFromPermission, UpdateUsuário } from "../../../../models/usuario";
 
 export default async function usuario(req: NextApiRequest, res: NextApiResponse){
     const {id} = req.query;
@@ -14,7 +14,7 @@ export default async function usuario(req: NextApiRequest, res: NextApiResponse)
         if(!idEmpresa)
             return res.status(400).json({mensagem: "ID da empresa não informado no cabeçalho"});
         
-        if(!idUsuário)
+        if(!idUsuário && idUsuário !== 0)
             return res.status(400).json({mensagem: "ID do usuário não informado na query"});
         
         if(!token)
@@ -25,8 +25,9 @@ export default async function usuario(req: NextApiRequest, res: NextApiResponse)
         if(!decoded)
             return res.status(400).json({mensagem: "Token inválido"});
         
+        
         getUsuárioEmpresa(decoded.data, idEmpresa).then(async usuárioEmpresa => {
-            if(usuárioEmpresa.id_permissao > 1){
+            if(usuárioEmpresa.id == idUsuário){
                 if(req.method == "PUT"){
                     const { nome, email } = req.body;
     
@@ -45,7 +46,37 @@ export default async function usuario(req: NextApiRequest, res: NextApiResponse)
                     }
                 }
             }else{
-                res.status(401).json({mensagem: "O usuário logado não tem permissão para acessar essa rota"});
+                if(usuárioEmpresa.id_permissao > 2){
+                    if(req.method == "PUT"){
+                        const { nome, email } = req.body;
+        
+                        if(nome && email){
+                            const updated = await UpdateUsuário(idUsuário, email, nome, email);
+        
+                            if(updated){
+                                res.status(200).json({success: true, mensagem: "Usuário atualizado com sucesso"});
+                            }else{
+                                res.status(500).json({success: false, mensagem: "Erro ao atualizar usuário"});
+                            }
+                        }else{
+                            res.status(400).json({
+                                mensagem: "Informe o nome e o email"
+                            });
+                        }
+                    }
+
+                    if(req.method == "GET"){
+                        if(idUsuário === 0){
+                            getUsuáriosEmpresaFromPermission(idEmpresa, 2).then(usuarios => {
+                                res.status(200).json({success: true, mensagem: "Funcionários listados com sucesso", usuarios});
+                            }).catch(error => {
+                                res.status(500).json({success: false, mensagem: "Erro ao listar funcionários", error});
+                            })
+                        }
+                    }
+                }else{
+                    res.status(401).json({mensagem: "O usuário logado não tem permissão para acessar essa rota"});
+                }
             }
         }).catch(error => {
             res.status(500).json({success: false, mensagem: "Erro ao buscar usuário"});

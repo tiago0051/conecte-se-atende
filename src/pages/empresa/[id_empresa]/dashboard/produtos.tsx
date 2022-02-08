@@ -11,68 +11,72 @@ import { motion } from "framer-motion"
 import Loading from "../../../../components/loading"
 import Head from "next/head"
 
-interface IServiço {
-    id: number,
+interface IProduto {
+    id_produto: number,
+    tipo_produto: number,
     nome: string,
-    descrição: string,
-    valor: number
+    descricao?: string,
+    valor_custo?: number,
+    valor_venda_varejo: number,
+    valor_venda_atacado?: number
 }
 
 export default function Serviços(props : {id_empresa: number}) {
     const router = useRouter()
 
-    const [serviços, setServiços] = useState<IServiço[]>([])
-    const [serviçosList, setServiçosList] = useState<IServiço[]>([])
+    const [produtos, setProdutos] = useState<IProduto[]>([])
+    const [produtosList, setProdutosList] = useState<IProduto[]>([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const {token} = parseCookies()
 
-        axios.get("/api/servicos/0", {headers: {Authorization: `${token}`, id_empresa: props.id_empresa + ""}}).then(response => {
+        axios.get("/api/produtos/0", {headers: {Authorization: `${token}`, id_empresa: props.id_empresa + ""}}).then(response => {
             if(response.data.success){
-                setServiços(response.data.serviços)
+                console.log(response.data.produtos)
+                setProdutos(response.data.produtos)
                 setLoading(false)
             }else{
-                alert("Erro ao carregar os serviços")
+                alert("Erro ao carregar os produtos")
                 setLoading(false)
             }
         })
     }, [])
 
     useEffect(() => {
-        setServiçosList(serviços)
-    }, [serviços])
+        setProdutosList(produtos)
+    }, [produtos])
 
     return(
         <Container>
             <Head>
-                <title>Conect-se Atende - Serviços</title>
+                <title>Conect-se Atende - Produtos</title>
             </Head>
-            <Navbar page="serviços" id_empresa={props.id_empresa}/>
+            <Navbar page="produtos" id_empresa={props.id_empresa}/>
             
             <SectionStyled>
                 <header>
-                    <h1>Serviços</h1>
-                    <button onClick={() => router.push(`/empresa/${props.id_empresa}/dashboard/servico/0`)}><FiPlus/>Adicionar Serviço</button>
+                    <h1>Produtos</h1>
+                    <button onClick={() => router.push(`/empresa/${props.id_empresa}/dashboard/produto/0`)}><FiPlus/>Adicionar</button>
                 </header>
 
                 <main>
                     <label>
-                        <input type="text" placeholder="Pesquisar Serviço" onChange={event => setServiçosList(serviços.filter(serviço => serviço.nome.toLowerCase().includes(event.target.value.toLowerCase())))}/><FiSearch/>
+                        <input type="text" placeholder="Pesquisar" onChange={event => setProdutosList(produtos.filter(serviço => serviço.nome.toLowerCase().includes(event.target.value.toLowerCase())))}/><FiSearch/>
                     </label>
 
                     <ul>
                         {
                             !loading &&
-                            serviçosList.map(serviço => (
-                                <motion.div key={serviço.id as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}}>
-                                    <LineStyled onClick={() => router.push(`/empresa/${props.id_empresa}/dashboard/servico/${serviço.id}`)}>
+                            produtosList.map(produto => (
+                                <motion.div key={produto.id_produto as Key} animate={{x: 0, opacity: 1}} initial={{x: -100, opacity: 0}} transition={{ease: "backInOut", duration: 1}}>
+                                    <LineStyled onClick={() => router.push(`/empresa/${props.id_empresa}/dashboard/produto/${produto.id_produto}`)}>
                                         <div>
-                                            <h3><b>NOME:</b> {serviço.nome}</h3>
-                                            <p><b>DESCRIÇÃO:</b> {serviço.descrição}</p>
+                                            <h3><b>NOME:</b> {produto.nome}</h3>
+                                            <p><b>DESCRIÇÃO:</b> {produto.descricao}</p>
                                             <span><b>
                                                 {
-                                                    serviço.valor.toLocaleString("pt-BR", {style: "currency", currency: "BRL"})
+                                                    produto.valor_venda_varejo.toLocaleString("pt-BR", {style: "currency", currency: "BRL"})
                                                 }
                                             </b></span>
                                         </div>

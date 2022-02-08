@@ -7,11 +7,11 @@ export const Container = styled.main`
     height: 100vh;
 
     nav:nth-child(1) {
-        width: 250px;
+        width: 230px;
     }
 
     section:nth-child(2) {
-        width: calc(100% - 250px);
+        width: calc(100% - 230px);
         background-color: ${props => props.theme.colors.background};
         padding: 1rem 2rem;
     }
@@ -68,10 +68,6 @@ export const SectionStyled = styled.section`
             transition: filter 0.1s linear;
             cursor: pointer;
 
-            svg {
-                margin-right: 1rem;
-            }
-
             :hover {
                 filter: brightness(1.2);
             }
@@ -92,6 +88,7 @@ export const SectionStyled = styled.section`
 
     input {
         font-size: 1.3rem;
+        width: 100%;
         border-radius: 25px;
         padding: 10px 55px 10px 20px;
         border: 1px solid ${props => props.theme.colors.border};
@@ -115,17 +112,25 @@ export const SectionStyled = styled.section`
     }
 
     @media (max-width: 768px) {
+        header {
+            align-items: center;
 
-        h1 {
-            font-size: 2rem !important; 
+            > h1 {
+                font-size: 2rem !important;
+                padding: 0 !important;
+                border: 0 !important;
+            }
         }
 
         button {
             font-size: 0 !important;
-            width: 65px;
-            height: 65px;
+            width: 50px;
+            height: 50px;
             position: relative;
             border-radius: 50% !important;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
             
             > svg {
                 font-size: 1.5rem;
@@ -194,6 +199,34 @@ export const ConfiguraçõesStyled = styled.main`
     justify-content: space-between;
     width: 100%;
     height: 100vh;
+
+    fieldset {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        border: 1px solid #707070;
+    }
+
+    fieldset > label {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 0 1rem;
+
+        > p {
+            margin: 0;
+            padding: 0;
+
+        }
+
+        > input {
+            width: 20px;
+            border: 2px solid #707070;
+        }
+    }
 
     > div {
         display: flex;

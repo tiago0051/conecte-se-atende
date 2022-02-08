@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 
-import { getServiço, getServiços, InsertServiço, UpdateServiço } from "../../../models/serviço";
+import { getProduto, getProdutos, InsertProduto, UpdateServiço } from "../../../models/produto";
 import { getUsuárioEmpresa } from "../../../models/usuario";
 
 export default async function List(req: NextApiRequest, res: NextApiResponse){
     const {id} = req.query;
     const {authorization, id_empresa} = req.headers;
 
-    const idServiço = Number.parseInt(id as string);
+    const idProduto = Number.parseInt(id as string);
     const idEmpresa = Number.parseInt(id_empresa as string);
     const token = (authorization as string).replace('Bearer ', '');
 
@@ -16,7 +16,7 @@ export default async function List(req: NextApiRequest, res: NextApiResponse){
         if(!idEmpresa)
             return res.status(400).json({mensagem: "ID da empresa não informado no cabeçalho"});
         
-        if(!(idServiço >= 0)){
+        if(!(idProduto >= 0)){
             return res.status(400).json({mensagem: "ID do serviço não informado na query"});
         }
         
@@ -31,17 +31,17 @@ export default async function List(req: NextApiRequest, res: NextApiResponse){
         getUsuárioEmpresa(decoded.data, idEmpresa).then(async (usuárioEmpresa) => {
             if(usuárioEmpresa.id_permissao > 1){
                 if(req.method == "GET"){
-                    if(idServiço == 0) {
-                        getServiços(usuárioEmpresa.id_empresa).then(serviços => {
-                            return res.status(200).json({success: true, mensagem: "Serviços listados com sucesso", serviços});
+                    if(idProduto == 0) {
+                        getProdutos(usuárioEmpresa.id_empresa).then(produtos => {
+                            return res.status(200).json({success: true, mensagem: "Serviços listados com sucesso", produtos});
                         }).catch(error => {
                             return res.status(400).json({success: false, mensagem: "Erro ao listar serviços", error});
                         })
                     }else{
-                        const serviço = await getServiço(idServiço, idEmpresa);
+                        const produto = await getProduto(idProduto, idEmpresa);
 
-                        if(serviço){
-                            res.status(200).json({success: true, mensagem: "Serviço encontrado", serviço});
+                        if(produto){
+                            res.status(200).json({success: true, mensagem: "Serviço encontrado", produto});
                         }else{
                             res.status(404).json({success: false, mensagem: "Serviço não encontrado"});
                         }
@@ -49,15 +49,21 @@ export default async function List(req: NextApiRequest, res: NextApiResponse){
                 }
 
                 if(req.method == "PUT"){
-                    const { nome, descrição, valor } = req.body;
+                    const { tipo_produto, nome, descricao, valor_custo, valor_venda_varejo, valor_venda_atacado } = req.body;
 
-                    if(nome && descrição && valor){
-                        if(idServiço > 0){
-                            await UpdateServiço(idServiço, nome, descrição, valor, usuárioEmpresa.id_empresa)
-                            return res.json({success: true, mensagem: "Serviço atualizado com sucesso"})
+                    if(nome && descricao && valor_venda_varejo){
+                        if(idProduto > 0){
+                            UpdateServiço(idProduto, tipo_produto, nome, descricao, valor_custo, valor_venda_varejo, valor_venda_atacado, idEmpresa).then(() => {
+                                return res.json({success: true, mensagem: "Serviço atualizado com sucesso"})
+                            }).catch(error => {
+                                return res.status(500).json({success: false, mensagem: "Erro ao atualizar serviço", error});
+                            })
                         }else{
-                            await InsertServiço(nome, descrição, valor, usuárioEmpresa.id_empresa)
-                            return res.json({success: true, mensagem: "Serviço cadastrado com sucesso"})
+                            InsertProduto(tipo_produto, nome, descricao, valor_custo, valor_venda_varejo, valor_venda_atacado, usuárioEmpresa.id_empresa).then(() => {
+                                return res.json({success: true, mensagem: "Produto cadastrado com sucesso"})
+                            }).catch(error => {
+                                return res.status(500).json({success: false, mensagem: "Erro ao cadastrar produto", error});
+                            })
                         }
                     }else{
                         return res.json({success: false, mensagem: 'Os campos obrigatórios não foram preenchidos'})
@@ -67,7 +73,7 @@ export default async function List(req: NextApiRequest, res: NextApiResponse){
                 res.status(401).json({mensagem: "O usuário logado não tem permissão para acessar essa rota"});
             }
         }).catch(error => {
-            res.status(500).json({success: false, mensagem: "Erro ao buscar usuário"});
+            res.status(500).json({success: false, mensagem: "Erro ao buscar usuário", error});
         })
     }catch (error){
         res.status(401).json({mensagem: "Token inválido", error});

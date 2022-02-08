@@ -24,7 +24,7 @@ interface IResponseListarEmpresas {
 }
 
 export default function EscolherEmpresa(){
-    const {user} = useContext(AuthContext)
+    const {user, updateUser} = useContext(AuthContext)
     const router = useRouter()
 
     useEffect(() => {
@@ -40,14 +40,18 @@ export default function EscolherEmpresa(){
                     }
                 }
             })
+        }else{
+            updateUser()
         }
-    })
+    }, [user])
 
     return(
         <main>
             <Head>
                 <title>Conect-se Atende - Escolha sua Empresa</title>
             </Head>
+
+            <h1>Escolha sua Empresa</h1>
         </main>
     )
 }

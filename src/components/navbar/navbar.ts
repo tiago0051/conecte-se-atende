@@ -8,6 +8,7 @@ export const NavStyled = styled.nav`
     background-color: ${props => props.theme.colors.secondary};
     padding: 1rem 0;
     justify-content: space-between;
+    position: relative;
 
     div:nth-child(1) {
         width: 160px;
@@ -17,11 +18,6 @@ export const NavStyled = styled.nav`
         align-items: center;
         background-color: ${props => props.theme.colors.background};
         border-radius: 50%;
-    }
-    
-    > svg {
-        color: white;
-        back
     }
 
     ul {
@@ -35,8 +31,7 @@ export const NavStyled = styled.nav`
     }
 
     li {
-        margin: 0.7rem 0;
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -70,6 +65,7 @@ export const NavStyled = styled.nav`
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            flex-wrap: wrap;
             width: 100%;
             margin: 0;
             padding: 0;
@@ -78,12 +74,15 @@ export const NavStyled = styled.nav`
             li {
                 display: flex;
                 flex-direction: column;
+                justify-content: center;
+                align-items: center;
                 height: 100%;
                 margin: 0;
-                font-size: 1.5rem;
+                font-size: 1rem;
+                width: calc(100% / 4);
 
                 svg {
-                    font-size: 2rem;
+                    font-size: 1.6rem;
                 }
             }
 

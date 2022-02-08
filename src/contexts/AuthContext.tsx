@@ -26,7 +26,8 @@ interface IAuthContext {
     isAuthenticated: boolean,
     signIn(usuário: String, senha: String): Promise<IUser | null>,
     enviarEmailRecuperação(email: String): void,
-    trocarSenha(token: string, senha: String): Promise<boolean>
+    trocarSenha(token: string, senha: String): Promise<boolean>,
+    updateUser(): void,
 }
 
 export const AuthContext = createContext({} as IAuthContext);
@@ -38,6 +39,10 @@ export const AuthProvider:FC = ({ children }) => {
     const isAuthenticated = !!user;
 
     useEffect(() => {
+        updateUser
+    }, [])
+
+    function updateUser(){
         const {token} = parseCookies()
         
         if(token){
@@ -55,7 +60,7 @@ export const AuthProvider:FC = ({ children }) => {
         }else{
             setUser(null)
         }
-    }, [])
+    }
 
     async function signIn (usuário: String, senha: String): Promise<IUser | null> {
         return new Promise((resolve, reject) => {
@@ -98,7 +103,7 @@ export const AuthProvider:FC = ({ children }) => {
     }
 
   return (
-        <AuthContext.Provider value={{isAuthenticated, signIn, user, enviarEmailRecuperação, trocarSenha}}>
+        <AuthContext.Provider value={{isAuthenticated, signIn, user, enviarEmailRecuperação, trocarSenha, updateUser}}>
             {children}
         </AuthContext.Provider> 
   );

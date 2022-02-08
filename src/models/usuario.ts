@@ -61,6 +61,22 @@ export async function getUsuárioEmpresa(id: number, id_empresa : number){
     })
 }
 
+export async function getUsuáriosEmpresaFromPermission(id_empresa: number, id_permissao: number): Promise<IUsuárioEmpresa[]>{
+    const DB = await db();
+
+    return new Promise<IUsuárioEmpresa[]>((resolve, reject) => {
+        DB.query(`SELECT * FROM empresa_possui_usuario INNER JOIN usuarios ON usuarios.id = id_usuario WHERE id_empresa = '${id_empresa}' AND id_permissao = '${id_permissao}'`, (err, result) => {
+            if(err) reject(err)
+            
+            if(result.length > 0){
+                resolve(result.map((r: IUsuárioEmpresa) => usuárioEmpresa(r.id, r.user, r.nome, r.email, r.id_empresa, r.id_permissao)))
+            }else{
+                resolve([])
+            }
+        })
+    })
+}
+
 export async function getUsuárioByEmail(email: string){
     const DB = await db();
 

@@ -33,7 +33,7 @@ export async function getCliente(id: number, id_empresa: number){
     })
 }
 
-export async function InsertCliente(nome: String, email: String, cpf: string, whatsapp: string, telefone: string, id_empresa: number, endereço: string, aniversario: string, obs: String){
+export async function InsertCliente(nome: String, email: string, cpf: string, whatsapp: string, telefone: string, id_empresa: number, endereço: string, aniversario: string, obs: String){
     const DB = await db();
 
     var usuário = await InsertUsuário(email, nome, email, id_empresa, 1)
