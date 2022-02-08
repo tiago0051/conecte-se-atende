@@ -25,7 +25,7 @@ interface IAuthContext {
     user: IUser | null,
     isAuthenticated: boolean,
     signIn(usuário: String, senha: String): Promise<IUser | null>,
-    enviarEmailRecuperação(email: String): void,
+    enviarEmailRecuperação(email: String): Promise<boolean>,
     trocarSenha(token: string, senha: String): Promise<boolean>,
     updateUser(): void,
 }
@@ -77,13 +77,13 @@ export const AuthProvider:FC = ({ children }) => {
         })
     }
 
-    async function enviarEmailRecuperação(email: String){
+    async function enviarEmailRecuperação(email: String): Promise<boolean>{
         return new Promise<boolean>((resolve, reject) => {
             axios.post('/api/auth/verificar_email', {email: email}).then(response => {
                 if(response.status == 200){
-                    resolve(response.data)
+                    resolve(response.data.enviado)
                 }else{
-                    reject(response.data)
+                    reject(response.data.enviado)
                 }
             })
         })

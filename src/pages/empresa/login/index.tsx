@@ -31,9 +31,19 @@ export default function Login(){
                 setError('Preencha o campo de email')
             }else{
                 setLoading(true)
-                await enviarEmailRecuperação(email)
-                setLoading(false)
-                setError('E-mail enviado com sucesso')
+                enviarEmailRecuperação(email).then((enviado) => {
+                    if(enviado){
+                        setError('E-mail enviado com sucesso')
+                    }else{
+                        setError('Erro ao enviar e-mail')
+                    }
+
+                    setLoading(false)
+                }).catch(error => {
+                    setError('Erro ao enviar e-mail')
+                    setLoading(false)
+                })
+               
             }
         }else{
             setLoading(true)

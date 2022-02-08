@@ -137,6 +137,10 @@ export const SectionStyled = styled.section`
                 position: absolute;
             }
         }
+
+        form > :last-child{
+            background-color: black;
+        }
     }
 `
 
