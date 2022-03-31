@@ -21,7 +21,8 @@ interface IProduto {
     descricao?: string,
     valor_custo?: number,
     valor_venda_varejo: number,
-    valor_venda_atacado?: number
+    valor_venda_atacado?: number,
+    quantidade?: number
 }
 
 export default function Editar({idProduto, id_empresa} : {idProduto: number, id_empresa: number}) {
@@ -33,6 +34,7 @@ export default function Editar({idProduto, id_empresa} : {idProduto: number, id_
     const [valorCusto, setValorCusto] = useState<number>()
     const [valorVendaVarejo, setValorVendaVarejo] = useState<number>()
     const [valorVendaAtacado, setValorVendaAtacado] = useState<number>()
+    const [quantidade, setQuantidade] = useState<number>()
 
     const [loading, setLoading] = useState(true)
 
@@ -52,6 +54,7 @@ export default function Editar({idProduto, id_empresa} : {idProduto: number, id_
                     setValorCusto(produto.valor_custo)
                     setValorVendaVarejo(produto.valor_venda_varejo)
                     setValorVendaAtacado(produto.valor_venda_atacado)
+                    setQuantidade(produto.quantidade)
 
                     setLoading(false)
                 }
@@ -71,7 +74,8 @@ export default function Editar({idProduto, id_empresa} : {idProduto: number, id_
             descricao: descrição,
             valor_custo: valorCusto,
             valor_venda_varejo: valorVendaVarejo,
-            valor_venda_atacado: valorVendaAtacado
+            valor_venda_atacado: valorVendaAtacado,
+            quantidade
         }
 
         axios.put(`/api/produtos/${idProduto}`, produto, {headers: {Authorization: token, id_empresa: id_empresa + ""}}).then((response) => {
@@ -81,6 +85,13 @@ export default function Editar({idProduto, id_empresa} : {idProduto: number, id_
                 router.back()
             }
         })
+    }
+
+    function changeTipoProduto(){
+        if(tipo_produto == 1){
+            setQuantidade(0)
+        }
+        setTipo_produto(tipo => tipo == 1 ? 2 : 1)
     }
 
     return(
@@ -95,14 +106,15 @@ export default function Editar({idProduto, id_empresa} : {idProduto: number, id_
 
                 <ConfiguraçõesStyled>
                     <motion.form id="form" onSubmit={handleSubmit} initial={{x: -100, opacity: 0}} animate={{x: 0, opacity: 1}} transition={{ease: "easeInOut", duration: 2}}>
+                        <input type="submit" id="salvar"/>
                         <fieldset>
                             <legend>O produto é?</legend>
                             <label><p>Serviço</p>
-                                <input type="checkbox" name="serviço" id="serviço" checked={tipo_produto == 2} onChange={() => setTipo_produto(tipo => tipo == 1 ? 2 : 1)}/>
+                                <input type="checkbox" name="serviço" id="serviço" checked={tipo_produto == 2} onChange={() => changeTipoProduto()}/>
                             </label>
 
                             <label><p>Produto</p>
-                                <input type="checkbox" name="produto" id="produto" checked={tipo_produto == 1} onChange={() => setTipo_produto(tipo => tipo == 1 ? 2 : 1)}/>
+                                <input type="checkbox" name="produto" id="produto" checked={tipo_produto == 1} onChange={() => changeTipoProduto()}/>
                             </label>
                         </fieldset>
 
@@ -126,7 +138,13 @@ export default function Editar({idProduto, id_empresa} : {idProduto: number, id_
                             <input type="number" defaultValue={valorVendaAtacado} onChange={event => setValorVendaAtacado(Number.parseFloat(event.target.value))}/>
                         </label>
 
-                        <input type="submit" id="salvar"/>
+                        {
+                            tipo_produto == 1 && (
+                                <label><p>Quantidade em Estoque</p>
+                                    <input type="number" defaultValue={quantidade} onChange={event => tipo_produto == 1 ? setQuantidade(Number.parseFloat(event.target.value)) : setQuantidade(0)}/>
+                                </label>
+                            )
+                        }
                     </motion.form>
                 </ConfiguraçõesStyled>
             </SectionStyled>

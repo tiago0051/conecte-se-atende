@@ -7,7 +7,9 @@ interface IProduto {
     descricao?: string,
     valor_custo?: number,
     valor_venda_varejo: number,
-    valor_venda_atacado?: number
+    valor_venda_atacado?: number,
+    quantidade?: number,
+    id_empresa: number
 }
 
 export async function getProduto(id: number, id_empresa: number){
@@ -25,7 +27,9 @@ export async function getProduto(id: number, id_empresa: number){
                     descricao: result[0].descricao, 
                     valor_custo: result[0].valor_custo,
                     valor_venda_varejo: result[0].valor_venda_varejo,
-                    valor_venda_atacado: result[0].valor_venda_atacado
+                    valor_venda_atacado: result[0].valor_venda_atacado,
+                    quantidade: result[0].quantidade,
+                    id_empresa: result[0].id_empresa
                 } as IProduto)
             }else{
                 reject(new Error('Produto não encontrado'))
@@ -34,7 +38,7 @@ export async function getProduto(id: number, id_empresa: number){
     })
 }
 
-export async function InsertProduto(tipo_produto: number, nome: string, descrição: string, valor_custo: number, valor_venda_varejo: number, valor_venda_atacado: number, id_empresa: number){
+export async function InsertProduto(tipo_produto: number, nome: string, descrição: string, valor_custo: number, valor_venda_varejo: number, valor_venda_atacado: number, quantidade: number, id_empresa: number){
     const DB = await db();
 
     return new Promise<Boolean>((resolve, reject) => {
@@ -45,6 +49,7 @@ export async function InsertProduto(tipo_produto: number, nome: string, descriç
             `${valor_custo ? 'valor_custo, ' : ''}` +
             `valor_venda_varejo, ` +
             `${valor_venda_atacado ? 'valor_venda_atacado, ' : ''}` +
+            `${quantidade ? 'quantidade, ' : ''}` +
             `id_empresa` +
             `) VALUES (` +
                 `'${tipo_produto}', ` +
@@ -53,6 +58,7 @@ export async function InsertProduto(tipo_produto: number, nome: string, descriç
                 `${valor_custo ? `'${valor_custo}', ` : ''}` +
                 `'${valor_venda_varejo}', ` +
                 `${valor_venda_atacado ? `'${valor_venda_atacado}', ` : ''}` +
+                `${quantidade ? `'${quantidade}', ` : ''}` +
                 `'${id_empresa}')`;
 
         DB.query(sqlQuery, (err, result) => {
@@ -67,7 +73,7 @@ export async function InsertProduto(tipo_produto: number, nome: string, descriç
     })
 }
 
-export async function UpdateServiço(id: number, tipo_produto: number, nome: string, descricao: string, valor_custo: number, valor_venda_varejo: number, valor_venda_atacado: number, id_empresa: number){
+export async function UpdateProduto(id: number, tipo_produto: number, nome: string, descricao: string, valor_custo: number, valor_venda_varejo: number, valor_venda_atacado: number, quantidade: number, id_empresa: number){
     const DB = await db();
 
     return new Promise<Boolean>((resolve, reject) => {
@@ -79,7 +85,10 @@ export async function UpdateServiço(id: number, tipo_produto: number, nome: str
             `${valor_custo ? `, valor_custo = '${valor_custo}'` : ``}` +
             `, valor_venda_varejo = '${valor_venda_varejo}'` +
             `${valor_venda_atacado ? `, valor_venda_atacado = '${valor_venda_atacado}'` : ``}` +
+            `${quantidade ? `, quantidade = '${tipo_produto == 2 ? 0 : quantidade}'` : `, quantidade = '0'`}` +
             ` WHERE id_produto = ${id} AND id_empresa = ${id_empresa};`
+
+        console.log(sqlQuery)
 
         DB.query(sqlQuery, (err, result) => {
             if(err) reject(err)
@@ -100,7 +109,7 @@ export async function getProdutos(id_empresa: number) : Promise<IProduto[]>{
         DB.query(`SELECT * FROM produtos WHERE id_empresa = ${id_empresa};`, (err, result) => {
             if(err) reject(err)
            resolve(result.map((produto: IProduto) => {
-               return {id_produto: produto.id_produto, tipo_produto: produto.tipo_produto, nome: produto.nome, descricao: produto.descricao, valor_venda_varejo: produto.valor_venda_varejo, valor_venda_atacado: produto.valor_venda_atacado}
+               return {id_produto: produto.id_produto, tipo_produto: produto.tipo_produto, nome: produto.nome, descricao: produto.descricao, valor_venda_varejo: produto.valor_venda_varejo, valor_venda_atacado: produto.valor_venda_atacado, quantidade: produto.quantidade}
            }))
         })
     })

@@ -9,6 +9,7 @@ export const NavStyled = styled.nav`
     padding: 1rem 0;
     justify-content: space-between;
     position: relative;
+    z-index: 3;
 
     div:nth-child(1) {
         width: 160px;

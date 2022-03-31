@@ -6,6 +6,8 @@ export default async function VerificarEmail(req: NextApiRequest, res: NextApiRe
     const {email} = req.body;
 
     getUsuárioByEmail(email).then(async usuário => {
+
+      console.log(usuário)
       const tokenEmail = jwt.sign({
           data: email
         }, process.env.JWT_SECRET_EMAIL!, { expiresIn: 60 * 15 })

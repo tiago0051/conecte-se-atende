@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
-import { getUsuárioEmpresa, getUsuáriosEmpresaFromPermission, UpdateUsuário } from "../../../../models/usuario";
+import { getUsuárioEmpresa, getUsuáriosEmpresaFromPermission, InsertUsuário, UpdateUsuário } from "../../../../models/usuario";
 
 export default async function usuario(req: NextApiRequest, res: NextApiResponse){
     const {id} = req.query;
@@ -51,12 +51,20 @@ export default async function usuario(req: NextApiRequest, res: NextApiResponse)
                         const { nome, email } = req.body;
         
                         if(nome && email){
-                            const updated = await UpdateUsuário(idUsuário, email, nome, email);
-        
-                            if(updated){
-                                res.status(200).json({success: true, mensagem: "Usuário atualizado com sucesso"});
+                            if(idUsuário === 0){
+                                InsertUsuário(email, nome, email, idEmpresa, 3).then(Usuário => {
+                                    res.status(200).json({success: true, mensagem: "Usuário criado com sucesso", Usuário});
+                                }).catch(error => {
+                                    res.status(500).json({success: false, mensagem: "Erro ao inserir usuário", error});
+                                })
                             }else{
-                                res.status(500).json({success: false, mensagem: "Erro ao atualizar usuário"});
+                                const updated = await UpdateUsuário(idUsuário, email, nome, email);
+        
+                                if(updated){
+                                    res.status(200).json({success: true, mensagem: "Usuário atualizado com sucesso"});
+                                }else{
+                                    res.status(500).json({success: false, mensagem: "Erro ao atualizar usuário"});
+                                }
                             }
                         }else{
                             res.status(400).json({

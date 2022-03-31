@@ -18,7 +18,7 @@ interface IUsuário {
     nome: String,
     email: String,
     id_empresa?: number,
-    id_permissao?: number
+    id_permissao?: number,
 }
 
 interface IResponse {
@@ -65,7 +65,7 @@ export default function Funcionários(props: {id_empresa: number}) {
             <SectionStyled>
                 <header>
                     <h1>Funcionários</h1>
-                    <button onClick={() => router.push("/empresa/"+ props.id_empresa +"/dashboard/usuário/0")}><FiUserPlus/>Adicionar</button>
+                    <button onClick={() => router.push("/empresa/"+ props.id_empresa +"/dashboard/usuario/0")}><FiUserPlus/>Adicionar</button>
                 </header>
 
                 <main>

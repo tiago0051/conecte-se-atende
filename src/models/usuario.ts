@@ -65,7 +65,8 @@ export async function getUsuáriosEmpresaFromPermission(id_empresa: number, id_p
     const DB = await db();
 
     return new Promise<IUsuárioEmpresa[]>((resolve, reject) => {
-        DB.query(`SELECT * FROM empresa_possui_usuario INNER JOIN usuarios ON usuarios.id = id_usuario WHERE id_empresa = '${id_empresa}' AND id_permissao = '${id_permissao}'`, (err, result) => {
+        var sqlQuery = `SELECT * FROM empresa_possui_usuario INNER JOIN usuarios ON usuarios.id = id_usuario WHERE id_empresa = '${id_empresa}' AND id_permissao >= '${id_permissao}'`
+        DB.query(sqlQuery, (err, result) => {
             if(err) reject(err)
             
             if(result.length > 0){

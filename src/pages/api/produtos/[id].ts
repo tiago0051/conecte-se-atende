@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 
-import { getProduto, getProdutos, InsertProduto, UpdateServiço } from "../../../models/produto";
+import { getProduto, getProdutos, InsertProduto, UpdateProduto } from "../../../models/produto";
 import { getUsuárioEmpresa } from "../../../models/usuario";
 
 export default async function List(req: NextApiRequest, res: NextApiResponse){
@@ -49,17 +49,17 @@ export default async function List(req: NextApiRequest, res: NextApiResponse){
                 }
 
                 if(req.method == "PUT"){
-                    const { tipo_produto, nome, descricao, valor_custo, valor_venda_varejo, valor_venda_atacado } = req.body;
+                    const { tipo_produto, nome, descricao, valor_custo, valor_venda_varejo, valor_venda_atacado, quantidade } = req.body;
 
                     if(nome && descricao && valor_venda_varejo){
                         if(idProduto > 0){
-                            UpdateServiço(idProduto, tipo_produto, nome, descricao, valor_custo, valor_venda_varejo, valor_venda_atacado, idEmpresa).then(() => {
+                            UpdateProduto(idProduto, tipo_produto, nome, descricao, valor_custo, valor_venda_varejo, valor_venda_atacado, quantidade, idEmpresa).then(() => {
                                 return res.json({success: true, mensagem: "Serviço atualizado com sucesso"})
                             }).catch(error => {
                                 return res.status(500).json({success: false, mensagem: "Erro ao atualizar serviço", error});
                             })
                         }else{
-                            InsertProduto(tipo_produto, nome, descricao, valor_custo, valor_venda_varejo, valor_venda_atacado, usuárioEmpresa.id_empresa).then(() => {
+                            InsertProduto(tipo_produto, nome, descricao, valor_custo, valor_venda_varejo, valor_venda_atacado, usuárioEmpresa.id_empresa, quantidade).then(() => {
                                 return res.json({success: true, mensagem: "Produto cadastrado com sucesso"})
                             }).catch(error => {
                                 return res.status(500).json({success: false, mensagem: "Erro ao cadastrar produto", error});

@@ -14,6 +14,7 @@ export const Container = styled.main`
         width: calc(100% - 230px);
         background-color: ${props => props.theme.colors.background};
         padding: 1rem 2rem;
+        z-index: 3;
     }
     
     @media (max-width: 768px) {
@@ -86,7 +87,7 @@ export const SectionStyled = styled.section`
         }
     }
 
-    input {
+    main > label > input {
         font-size: 1.3rem;
         width: 100%;
         border-radius: 25px;
@@ -120,26 +121,26 @@ export const SectionStyled = styled.section`
                 padding: 0 !important;
                 border: 0 !important;
             }
-        }
 
-        button {
-            font-size: 0 !important;
-            width: 50px;
-            height: 50px;
-            position: relative;
-            border-radius: 50% !important;
-            padding: 0;
-            justify-content: center;
-            align-items: center;
-            
-            > svg {
-                font-size: 1.5rem;
-                position: absolute;
+            > button {
+                font-size: 0 !important;
+                width: 50px;
+                height: 50px;
+                position: relative;
+                border-radius: 50% !important;
+                padding: 0;
+                justify-content: center;
+                align-items: center;
+                
+                > svg {
+                    font-size: 1.5rem;
+                    position: absolute;
+                }
             }
         }
 
-        form > :last-child{
-            background-color: black;
+        form > label:last-child{
+            padding-bottom: 3rem;
         }
     }
 `
